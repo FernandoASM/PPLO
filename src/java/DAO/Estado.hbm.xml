@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 26/04/2016 03:15:58 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="DAO.Estado" table="estado" schema="public" optimistic-lock="version">
+        <id name="idarticulo" type="integer">
+            <column name="idarticulo" precision="131089" scale="0" />
+            <generator class="foreign">
+                <param name="property">articulo</param>
+            </generator>
+        </id>
+        <one-to-one name="articulo" class="DAO.Articulo" constrained="true"></one-to-one>
+        <property name="estado" type="string">
+            <column name="estado" length="30" />
+        </property>
+    </class>
+</hibernate-mapping>

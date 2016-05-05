@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 26/04/2016 03:15:58 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="DAO.Contrasena" table="contrasena" schema="public" optimistic-lock="version">
+        <id name="correo" type="string">
+            <column name="correo" length="50" />
+            <generator class="foreign">
+                <param name="property">usuario</param>
+            </generator>
+        </id>
+        <one-to-one name="usuario" class="DAO.Usuario" constrained="true"></one-to-one>
+        <property name="contrasena" type="string">
+            <column name="contrasena" length="50" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title> Editar información </title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    Bienvenido
+                </p:layoutUnit>
+  <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                    <p:menu>
+                        <p:submenu label="Resources">
+                            <p:menuitem value="Instrumentos" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
+                            <p:menuitem value="Música" url="http://www.primefaces.org/documentation.html" />
+                            <p:menuitem value="Sonido" url="http://forum.primefaces.org/" />
+                            <p:menuitem value="Accesorios" url="http://forum.primefaces.org/" />
+
+                        </p:submenu>
+
+                    </p:menu>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <br/>
+                    <br/>
+                    <h:outputText value="INGRESE LOS DATOS" />
+                    <br/>
+                    <br/>
+                    <h:form>
+                        
+                    <h:panelGrid columns="3">
+                        <h:outputText value="Nombre :" />
+                        <p:inputText id="nombre" value="#{mBUsuario.nombre}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Apellido Paterno : " />
+                        <p:inputText id="appPaterno" value="#{mBUsuario.appPaterno}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Apellido Materno : " />
+                        <p:inputText id="appMaterno" value="#{mBUsuario.appMaterno}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Correo : " />
+                        <p:inputText id="correo" value="#{mBUsuario.correo}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Calle : " />
+                        <p:inputText id="calle"  value="#{mBUsuario.calle}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Número : " />
+                        <p:inputText id="num" value="#{mBUsuario.num}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Colonia : " />
+                        <p:inputText id="colonia" value="#{mBUsuario.colonia}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Delegación : " />
+                        <p:inputText id="delegacion" value="#{mBUsuario.delegacion}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Código Postal : " />
+                        <p:inputText id="codigopostal" value="#{mBUsuario.codigopostal}">
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Teléfono : " />
+                        <p:inputText id="telefono" value="#{mBUsuario.telefono}"  >
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Contraseña : " />
+                        <p:inputText id="contrasena" value="#{mBUsuario.contrasena}"></p:inputText>
+                        <br/>
+                        <br/>
+                            <p:commandButton value=" Aceptar " 
+                                             update="msn" action="#{mBUsuario.actualizar()}" styleClass="ui-priority-primary" />
+                            <p:commandButton action="administrarCuentaIH"  value="Regresar"   />
+                    </h:panelGrid>
+                    <br/>                        
+                    <h:outputText id="msn" value="#{mBUsuario.msn}" />
+                    
+                       
+                </h:form>
+                </p:layoutUnit>
+
+
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>

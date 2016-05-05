@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 26/04/2016 03:15:58 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="DAO.Articulo" table="articulo" schema="public" optimistic-lock="version">
+        <id name="idarticulo" type="integer">
+            <column name="idarticulo" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="usuario" class="DAO.Usuario" fetch="select">
+            <column name="correo" length="50" />
+        </many-to-one>
+        <property name="disponible" type="boolean">
+            <column name="disponible" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="1000" not-null="true" />
+        </property>
+        <set name="libros" table="libro" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idarticulo" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="DAO.Libro" />
+        </set>
+        <set name="instrumentos" table="instrumento" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idarticulo" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="DAO.Instrumento" />
+        </set>
+        <set name="prestas" table="presta" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idarticulo" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="DAO.Presta" />
+        </set>
+        <set name="musicas" table="musica" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idarticulo" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="DAO.Musica" />
+        </set>
+        <set name="solicitas" table="solicita" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idarticulo" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="DAO.Solicita" />
+        </set>
+        <one-to-one name="estado" class="DAO.Estado"></one-to-one>
+        <set name="accesorios" table="accesorio" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idarticulo" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="DAO.Accesorio" />
+        </set>
+        
+        <set name="sonidos" table="sonido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idarticulo" precision="131089" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="DAO.Sonido" />
+        </set>
+    </class>
+</hibernate-mapping>
