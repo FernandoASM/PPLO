@@ -11,7 +11,7 @@ public class Telefono  implements java.io.Serializable {
 
      private String correo;
      private Usuario usuario;
-     private int telefono;
+     private Integer telefono;
 
     public Telefono() {
     }
@@ -35,11 +35,11 @@ public class Telefono  implements java.io.Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    public int getTelefono() {
+    public Integer getTelefono() {
         return this.telefono;
     }
     
-    public void setTelefono(int telefono) {
+    public void setTelefono(Integer telefono) {
         this.telefono = telefono;
     }
 

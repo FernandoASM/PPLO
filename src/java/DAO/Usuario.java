@@ -17,8 +17,8 @@ public class Usuario  implements java.io.Serializable {
      private String calle;
      private String colonia;
      private String delegacion;
-     private Integer numero;
-     private Integer codigopostal;
+     private int numero;
+     private int codigopostal;
      private Set articulos = new HashSet(0);
      private Presta presta;
      private Solicita solicita;

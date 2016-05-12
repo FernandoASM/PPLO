@@ -2,6 +2,7 @@ package DAO;
 // Generated 26/04/2016 03:15:50 PM by Hibernate Tools 4.3.1
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +17,9 @@ public class Articulo  implements java.io.Serializable {
      private Usuario usuario;
      private boolean disponible;
      private String descripcion;
+     private String rutaimagen;
+     private Serializable imagen;
+     
      private Set libros = new HashSet(0);
      private Set instrumentos = new HashSet(0);
      private Set prestas = new HashSet(0);
@@ -137,10 +141,39 @@ public class Articulo  implements java.io.Serializable {
         this.sonidos = sonidos;
     }
 
-
-public String toString(){
-        return "Id " + this.idarticulo + " Disponible " +this.disponible;
+    /**
+     * @return the rutaimagen
+     */
+    public String getRutaimagen() {
+        return rutaimagen;
     }
+
+    /**
+     * @param rutaimagen the rutaimagen to set
+     */
+    public void setRutaimagen(String rutaimagen) {
+        this.rutaimagen = rutaimagen;
+    }
+
+    /**
+     * @return the imagen
+     */
+    public Serializable getImagen() {
+        return imagen;
+    }
+
+    /**
+     * @param imagen the imagen to set
+     */
+    public void setImagen(Serializable imagen) {
+        this.imagen = imagen;
+    }
+
+  
+    
+
+
+
 
 }
 
