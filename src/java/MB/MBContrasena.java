@@ -37,7 +37,7 @@ private String correo;
     private int codigopostal;
     
     private String contrasena;
-    private int telefono;
+    private double telefono;
     
     private String msn;
         
@@ -253,14 +253,14 @@ private String correo;
     /**
      * @return the telefono
      */
-    public int getTelefono() {
+    public double getTelefono() {
         return telefono;
     }
 
     /**
      * @param telefono the telefono to set
      */
-    public void setTelefono(int telefono) {
+    public void setTelefono(double telefono) {
         this.telefono = telefono;
     }
     

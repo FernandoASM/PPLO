@@ -17,256 +17,68 @@
             <p:layout fullPage="true">
             
  
-                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                    Bienvenido
-                </p:layoutUnit>
+                <p:layoutUnit  position="north" size="160" resizable="true" closable="true" collapsible="true">
+                    <p:graphicImage value="resources/prestapalaorquesta.png" />
+            </p:layoutUnit>
                 <div id="cap">
                     <img src="prestap'alaorquesta.png" width="200" height="100" alt="" />
                 </div>
-  <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+              <p:layoutUnit position="west" size="175" collapsible="true">
+                <h:form>
                     <p:menu>
-                        <p:submenu label="Resources">
-                            <p:menuitem value="Instrumentos" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
-                            <p:menuitem value="Música" url="http://www.primefaces.org/documentation.html" />
-                            <p:menuitem value="Sonido" url="http://forum.primefaces.org/" />
-                            <p:menuitem value="Accesorios" url="http://forum.primefaces.org/" />
+                        <p:submenu label="Menú">
+                            <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
+                            <p:menuitem value="Música" action ="mostrarMusicaIH" />
+                            <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
+                            <p:menuitem value="Accesorios" action ="mostrarAccesoriosIH" />
+                          
 
                         </p:submenu>
 
                     </p:menu>
+                    </h:form>
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
-                    <br/>
-                    <br/>
-                    <h:outputText value="Mis Árticulos" />
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
                     <h:form>
-                        
-                        
-                        
-                        <h:panelGrid columns="3" >
-                            
-                        <h:outputText value="IdArtículo :" />
-                        <p:inputText id="idarticulo" value="#{mBArticulo.idArticulo}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Disponible : " />
-                        <p:selectBooleanCheckbox id ="disponible" value="#{mBArticulo.disponible}" />
-                        <br/>
-                        <h:outputText value="Descripción : " />
-                        <p:inputText id="descripcion" value="#{mBArticulo.descripcion}" >
-                        </p:inputText>
-                        <br/>
-                        <br/>
-                        <br/>
-                        
-                        
-    <h:form id="form" >
-              <p:growl id="msgs" showDetail="true"/>
-              <p:dataTable id="idarticulo"   editable="true" editMode="cell" widgetVar="cellArt">
-       <f:facet name="header">
-          Mis Articulos
-       </f:facet>
+                        <p:messages id="messages" showDetail="true"  closable="true" />
+                    <br/>
+                    <br/>
+                    <h:outputText value="Articulos" />
+                    <br/>
+                    <p:dataScroller value="#{mBArticulo.lista}" var="car" chunkSize="100">
+                    <f:facet name="header">
+                        </f:facet>
  
-                 
+                        <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+                            <p:graphicImage value="#{car.rutaimagen}"  />
+                        
+                    <p:outputPanel>
+                        <h:panelGrid columns="2" cellpadding="2" columnClasses="logo,detail">
+                        <h:outputText value="Id Articulo:" />
+                        <h:outputText value="#{car.idarticulo}" style="font-weight: bold"/>
+                        
+                        <h:outputText value="Descripción:" />
+                        <h:outputText value="#{car.descripcion}" style="font-weight: bold"/>
  
-       <p:column headerText="Id">
-              
-          </p:column>
- 
-          <p:column headerText="Descripción">
-           
-       </p:column>
- 
-       <p:column headerText="Disponible">
-          
-       </p:column>
- 
-   </p:dataTable>
-
-</h:form>
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                       <!-- <h:outputText value="Categoria : " />
-                        <p:selectOneMenu id="categoria" value="#{mBArticulo.categoria}" required="true" >
-                        <f:selectItem itemLabel="Instrumento" itemValue="1" />
-                        <f:selectItem itemLabel="Musica" itemValue="2" />
-                        <f:selectItem itemLabel="Sonido" itemValue="3" />
-                        <f:selectItem itemLabel="Accesorios" itemValue="4" />
-                        <f:selectItem itemLabel="Libros" itemValue="5" />                      
-                        </p:selectOneMenu>
+                        <h:outputText value="Disponible" />
+                        <h:outputText value="#{car.disponible}" style="font-weight: bold"/>
                         
-                        <br/>
-                        <h:outputText value="#{mBArticulo.categoria}" />
-                        <p:commandButton process="@parent:@parent" update="@form" value="Llenar formulario " />
-                        <br/>
-                        <p:separator />
-                        <br/>
-                        
-                        <h:form id="Instrumento" rendered="#{Integer(mBArticulo.categoria) == 1}">    
-                            <h:panelGrid columns="3" cellpadding="5">
-                        <h:outputText value="IdInstrumento :" />
-                        <p:inputText id="idinstrumento" value="#{mBArticulo.idinstrumento}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Nombre del Instrumento :" />
-                        <p:inputText id="nombreinstrumento" value="#{mBArticulo.nombreinstrumento}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Marca del Instrumento :" />
-                        <p:inputText id="marcainstrumento" value="#{mBArticulo.marcainstrumento}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Tipo de Instrumento :" />
-                        <p:inputText  id="tipoinstrumento" value="#{mBArticulo.tipoinstrumento}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Año de Instrumento :" />
-                        <p:inputText id="anoinstrumento" value="#{mBArticulo.anoinstrumento}">
-                        </p:inputText>
-                        <br/>
-                        </h:panelGrid>
-                    </h:form>    
-                        
-                        <br/>
-                        <h:form id="Musica" rendered="#{Integer(mBArticulo.categoria) == 2}">    
-                            <h:panelGrid columns="3" cellpadding="5">
-                        <h:outputText value="idMusica :" />
-                        <p:inputText id="idmusica" value="#{mBArticulo.idmusica}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Nombre del Aurtor :" />
-                        <p:inputText id="autormusica" value="#{mBArticulo.autormusica}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Genero :" />
-                        <p:inputText id="generomusica" value="#{mBArticulo.generomusica}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Formato :" />
-                        <p:inputText  id="formatomusica" value="#{mBArticulo.formatomusica}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Año :" />
-                        <p:inputText id="anomusica" value="#{mBArticulo.anomusica}">
-                        </p:inputText>
-                        <br/>
-                        </h:panelGrid>
-                    </h:form>    
-                        
-                        <br/>
-                        <h:form id="Sonido" rendered="#{Integer(mBArticulo.categoria) == 3}">    
-                            <h:panelGrid columns="3" cellpadding="5">
-                        <h:outputText value="idSonido :" />
-                        <p:inputText id="idsonido" value="#{mBArticulo.idsonido}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Nombre  :" />
-                        <p:inputText id="nombresonido" value="#{mBArticulo.nombresonido}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Marca :" />
-                        <p:inputText id="marcasonido" value="#{mBArticulo.marcasonido}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Potencia :" />
-                        <p:inputText  id="potenciasonido" value="#{mBArticulo.potenciasonido}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Tipo :" />
-                        <p:inputText id="tiposonido" value="#{mBArticulo.tiposonido}">
-                        </p:inputText>
-                        <br/>
-                        </h:panelGrid>
-                    </h:form>    
-                        
-                        <br/>
-                        <h:form id="Accesorio" rendered="#{Integer(mBArticulo.categoria) == 4}">    
-                            <h:panelGrid columns="3" cellpadding="5">
-                        <h:outputText value="idAccesorio :" />
-                        <p:inputText id="idaccesorio" value="#{mBArticulo.idaccesorio}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Nombre del Accesorio :" />
-                        <p:inputText id="nombreaccesorio" value="#{mBArticulo.nombreaccesorio}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Marca :" />
-                        <p:inputText id="marcaaccesorio" value="#{mBArticulo.marcaaccesorio}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Tipo :" />
-                        <p:inputText  id="tipoaccesorio" value="#{mBArticulo.tipoaccesorio}">
-                        </p:inputText>
-                        <br/>
-                        </h:panelGrid>
-                    </h:form>    
-                        
-                        <br/>
-                        <h:form id="Libro" rendered="#{Integer(mBArticulo.categoria) == 5}">    
-                            <h:panelGrid columns="3" cellpadding="5">
-                        <h:outputText value="IdLibro :" />
-                        <p:inputText id="idlibro" value="#{mBArticulo.idlibro}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Nombre del Autor :" />
-                        <p:inputText id="nombreautorlibro" value="#{mBArticulo.nombreautorlibro}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Nombre del Libro :" />
-                        <p:inputText id="nombrelibro" value="#{mBArticulo.nombrelibro}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Editorial :" />
-                        <p:inputText  id="editoriallibro" value="#{mBArticulo.editoriallibro}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Genero libro :" />
-                        <p:inputText id="generolibro" value="#{mBArticulo.generolibro}">
-                        </p:inputText>
-                        <br/>
-                        <h:outputText value="Año :" />
-                        <p:inputText id="ano" value="#{mBArticulo.anolibro}">
-                        </p:inputText>
-                        <br/>
-                        </h:panelGrid>
-                    </h:form>    
-                        
-                        <br/>
-                        <p:separator />
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                     -->
-                            <p:commandButton value=" Aceptar " 
-                                             update = "msn" action="#{mBArticulo.listaArticulos()}" styleClass="ui-priority-primary" />
-                            <p:commandButton action="administrarCuentaIH" value="Regresar"   />
-                            <h:outputText id="msn" value="#{mBArticulo.msn}" />
-                            
                     </h:panelGrid>
-                    <br/>                        
+            </p:outputPanel>
+                    </h:panelGrid>
+    </p:dataScroller>
+                    <p:commandButton action="administrarCuentaIH"  value="Editar"   />    
+                    <p:commandButton value="Eliminar" action="#{mBArticulo.eliminarArticulo()}"   />
                     
                     
-                       
-                </h:form>
+                    <br/>
+                    <p:commandButton action="administrarCuentaIH"  value="Regresar"   />
+                    <br/>
+                    <br/>
+                    
+                    
+                    
+                       </h:form>
                 </p:layoutUnit>
 
 

@@ -11,29 +11,30 @@
     <h:body>
         <p:layout fullPage="true">
 
-             <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                Bienvenido
+             <p:layoutUnit  position="north" size="160" resizable="true" closable="true" collapsible="true">
+                    <p:graphicImage value="resources/prestapalaorquesta.png" />
             </p:layoutUnit>
-            <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                        <p:layoutUnit position="west" size="175" collapsible="true">
+                <h:form>
                     <p:menu>
-                        <p:submenu label="Resources">
-                            <p:menuitem value="Instrumentos" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
-                            <p:menuitem value="Música" url="http://www.primefaces.org/documentation.html" />
-                            <p:menuitem value="Sonido" url="http://forum.primefaces.org/" />
-                            <p:menuitem value="Accesorios" url="http://forum.primefaces.org/" />
+                        <p:submenu label="Menú">
+                            <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
+                            <p:menuitem value="Música" action ="mostrarMusicaIH" />
+                            <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
+                            <p:menuitem value="Accesorios" action ="mostrarAccesoriosIH" />
+                          
 
                         </p:submenu>
 
                     </p:menu>
+                    </h:form>
                 </p:layoutUnit>
 
 
             <p:layoutUnit position="center">
-                <h:outputText id="msn" style ="color: blue" value="#{mBUsuario.msn}" />
-                <br/>
-                <br/>
                 <br/>
                 <h:form>
+                    <p:messages id="messages" showDetail="true"  closable="true" />
                     <h:panelGrid columns="1">
                         <p:commandButton value=" Editar información " 
                                         action ="administrarCuenta2IH" styleClass="ui-priority-primary" />
@@ -41,21 +42,27 @@
                         <p:commandButton value=" Subir Artículo " 
                                          action="subirArticulo" styleClass="ui-priority-primary" />
                         <br/>
-                        <p:commandButton value=" Ver mis Artículos" 
+                        <p:commandButton value=" Ver mis Artículos"  action="#{mBArticulo.mostrarArticulos()}" styleClass="ui-priority-primary" />
 
-                                         action="mostrarArticulosIH" styleClass="ui-priority-primary" />
-
-                                         
                         <br/>
-                        <p:commandButton value=" Eliminar Cuenta " action="#{mBUsuario.eliminarUsuario()}" styleClass="ui-priority-primary" />
+                        <p:commandButton value=" Eliminar Cuenta " action="#{mBUsuario.eliminarUsuario()}" styleClass="ui-priority-primary">
+                        <p:confirm header="Eliminar Cuenta" message="¿Estas seguro que quieres eliminar la cuenta?" icon="ui-icon-alert" />
+                          </p:commandButton>
+                        
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"  />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
+                            </p:confirmDialog>
                         <br/>
                     </h:panelGrid>
                     <br/>
                     <br/>
                     <br/>
                     <br/>
-                    <p:commandButton action="#{mBUsuario.cerrarSesion()}"  value="Cerrar Sesión" />
+                    <p:commandButton value="Cerrar Sesión" action="#{mBUsuario.cerrarSesion()}" />
                     <br/>
+                    <br/>
+                    
 
 
                 </h:form>

@@ -4,9 +4,9 @@
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/prestapalaorquesta</property>
     <property name="hibernate.connection.username">postgres</property>
-    <property name="hibernate.connection.password">fernando</property>
+    <property name="hibernate.connection.password">1234</property>
     <mapping resource="DAO/Instrumento.hbm.xml"/>
     <mapping resource="DAO/Sonido.hbm.xml"/>
     <mapping resource="DAO/Estado.hbm.xml"/>

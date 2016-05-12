@@ -6,52 +6,56 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Página Principal</title>
+        <title>Inicio Sesión</title>
     </h:head>
     <h:body>
         <p:layout fullPage="true">
 
-            <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                Bienvenido
+            <p:layoutUnit  position="north" size="170"  closable="true" >
+                    <p:graphicImage value="resources/prestapalaorquesta.png" />
             </p:layoutUnit>
 
-            <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                        <p:layoutUnit position="west" size="175" collapsible="true">
+                <h:form>
+                    
                     <p:menu>
-                        <p:submenu label="Resources">
-                            <p:menuitem value="Instrumentos" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
-                            <p:menuitem value="Música" url="http://www.primefaces.org/documentation.html" />
-                            <p:menuitem value="Sonido" url="http://forum.primefaces.org/" />
-                            <p:menuitem value="Accesorios" url="http://forum.primefaces.org/" />
+                        <p:submenu label="Menú">
+                            <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
+                            <p:menuitem value="Música" action ="mostrarMusicaIH" />
+                            <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
+                            <p:menuitem value="Accesorios" action ="mostrarAccesoriosIH" />
+                          
 
                         </p:submenu>
 
                     </p:menu>
+                    </h:form>
                 </p:layoutUnit>
 
 
             <p:layoutUnit position="center">
+                <p:messages id="messages" showDetail="true" autoUpdate="true"  closable="true" />
                 <h:outputText value ="Iniciar Sesión" />
                 <br/>
                 <br/>
                 <h:form>
+                    
                     <h:panelGrid columns="3">
-                        <h:outputText value="Correo :" />
-                        <p:inputText id="correo" value="#{mBUsuario.correo}">
+                       <h:outputText value="Correo : " />
+                        <p:inputText id="correo" value="#{mBUsuario.correo}" validatorMessage="Introduce una dirección de correo electrónico valida"> <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                         </p:inputText>
                         <br/>
                         <h:outputText value="Contraseña : " />
-                        <h:inputSecret id="contrasena" value="#{mBUsuario.contrasena}"></h:inputSecret>
-                        <!-- <h:messages/>-->
+                        <h:inputSecret id="contrasena" value="#{mBUsuario.contrasena}" required="true" label="Contraseña"></h:inputSecret>
                         <br/>
                         <br/>
                         <p:commandButton value=" Ingresar " 
-                                         update ="msn"  action="#{mBUsuario.inicioSesion()}" styleClass="ui-priority-primary" />
-                        <p:commandButton action="homeIH"  value="Cancelar"   />
+                                         update ="msn"  action="#{mBUsuario.inicioSesion()}" ajax="false" validateClient="true" styleClass="ui-priority-primary" />
+                        <p:commandButton action="homeIH"  value="Cancelar"/>
                     </h:panelGrid>
                     <br/>
-                    <h:outputText id="msn" style ="color: red" value="#{mBUsuario.msn}" />
                     <br/>
-                        <p:commandButton action="registroIH"  value="Registrarse"   />
+                    <p:commandButton action="registroIH"  value="Registrarse"  />
                     <br/>
                     <br/>
                     <br/>
