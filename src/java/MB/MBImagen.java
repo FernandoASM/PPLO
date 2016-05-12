@@ -96,9 +96,8 @@ public class MBImagen implements Serializable{
     }  
  
     public void copyFile(String fileName, InputStream in) {
-                 ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-                 destination =(String) servletContext.getRealPath("/resources/"); // Sustituye "/" por el directorio ej: "/upload"
-
+                 //ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+                 destination = "C:\\Users\\Rodrigo\\Desktop\\PrestaPalaOrquesta\\web\\resources\\";//(String) servletContext.getRealPath("/resources"); // Sustituye "/" por el directorio ej: "/upload
            try {
                OutputStream out = new FileOutputStream(new File(getDestination() + fileName ));
                int read = 0;
@@ -194,10 +193,10 @@ public class MBImagen implements Serializable{
      */
      public void subiImagen (FileUploadEvent event){
          try{
-             
-             System.out.println("Hasta aqui vas bien");
              copyFile(event.getFile().getFileName(), event.getFile().getInputstream());        
-             rutaimagen = getDestination() + event.getFile().getFileName(); 
+             //rutaimagen = getDestination()+  event.getFile().getFileName(); 
+             //rutaimagen = event.getFile().getFileName(); 
+             rutaimagen = event.getFile().getFileName(); 
              imagen = event.getFile().getContents();
              FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
          }catch(Exception e){

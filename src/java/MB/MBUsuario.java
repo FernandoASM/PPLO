@@ -274,8 +274,7 @@ public class MBUsuario implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La cuenta se ha creado satisfactoriamente"));
             redirecciona = "inicioSesionIH";
         } catch (Exception e) {
-            System.out.println("Hubo un error al intentar crear la cuenta" + e);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Hubo un error al intentar crear la cuenta"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "El correo " +correo + " tiene una cuenta asignada."));
             redirecciona = "registroIH";
         }
         

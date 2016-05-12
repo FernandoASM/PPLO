@@ -49,8 +49,9 @@
                     <f:facet name="header">
                         </f:facet>
  
-                        <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
-                            <p:graphicImage value="#{car.rutaimagen}"  />
+                        <h:panelGrid columns="2" style="width:50%" columnClasses="logo,detail">
+                            <p:graphicImage value="resources/#{car.rutaimagen}"  />
+                            <!--name="demo/images/car/}-big.gif-->
                         
                     <p:outputPanel>
                         <h:panelGrid columns="2" cellpadding="2" columnClasses="logo,detail">
@@ -63,6 +64,8 @@
                         <h:outputText value="Disponible" />
                         <h:outputText value="#{car.disponible}" style="font-weight: bold"/>
                         
+                        <p:commandButton action="administrarCuentaIH"  value="Editar"   />    
+                        <p:commandButton value="Eliminar" action="#{mBArticulo.eliminarArticulo()}"   />
                     </h:panelGrid>
             </p:outputPanel>
                     </h:panelGrid>

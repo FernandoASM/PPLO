@@ -412,8 +412,8 @@ public class MBArticulo implements Serializable{
             tmp.setUsuario(usuario.getUsuario());
             tmp.setImagen(getMiImagen().getImagen());
             System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
-            //rutaimagen = getMiImagen().getRutaimagen() + idarticulo +  usuario.getUsuario().getCorreo();
-            tmp.setRutaimagen(getMiImagen().getRutaimagen());
+            rutaimagen = getMiImagen().getRutaimagen();
+            tmp.setRutaimagen(rutaimagen);
             //guardar string
 
             ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
