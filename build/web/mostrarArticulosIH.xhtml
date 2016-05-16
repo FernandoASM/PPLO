@@ -45,33 +45,31 @@
                     <br/>
                     <h:outputText value="Articulos" />
                     <br/>
-                    <p:dataScroller value="#{mBArticulo.lista}" var="car" chunkSize="100">
+                    <p:dataScroller value="#{mBArticulo.lista}" var="car" chunkSize="100" styleClass="MBArticulo-table"  rowIndexVar="index">
                     <f:facet name="header">
                         </f:facet>
  
                         <h:panelGrid columns="2" style="width:50%" columnClasses="logo,detail">
+                            <h:outputText value="Imagen: " />
                             <p:graphicImage value="resources/#{car.rutaimagen}"  />
                             <!--name="demo/images/car/}-big.gif-->
                         
                     <p:outputPanel>
                         <h:panelGrid columns="2" cellpadding="2" columnClasses="logo,detail">
-                        <h:outputText value="Id Articulo:" />
+                        <h:outputText value="Id Articulo: " />
                         <h:outputText value="#{car.idarticulo}" style="font-weight: bold"/>
                         
-                        <h:outputText value="Descripción:" />
+                        <h:outputText value="Descripción: " />
                         <h:outputText value="#{car.descripcion}" style="font-weight: bold"/>
  
                         <h:outputText value="Disponible" />
                         <h:outputText value="#{car.disponible}" style="font-weight: bold"/>
-                        
-                        <p:commandButton action="administrarCuentaIH"  value="Editar"   />    
-                        <p:commandButton value="Eliminar" action="#{mBArticulo.eliminarArticulo()}"   />
+                       
+                        <p:commandButton value="Eliminar" action="#{mBArticulo.deletearticulo()}"    />
                     </h:panelGrid>
             </p:outputPanel>
                     </h:panelGrid>
     </p:dataScroller>
-                    <p:commandButton action="administrarCuentaIH"  value="Editar"   />    
-                    <p:commandButton value="Eliminar" action="#{mBArticulo.eliminarArticulo()}"   />
                     
                     
                     <br/>

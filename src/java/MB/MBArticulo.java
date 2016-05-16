@@ -136,7 +136,7 @@ public class MBArticulo implements Serializable{
     @ManagedProperty("#{mBImagen}")
     private MBImagen miImagen;
     
-    
+        
     /**
      * Creates a new instance of MBArticulo
      */
@@ -213,6 +213,11 @@ public class MBArticulo implements Serializable{
         this.msn = msn;
     }
     
+    
+    
+    
+    
+  
     
     //Subir Imagen
     
@@ -379,15 +384,37 @@ public class MBArticulo implements Serializable{
       public String mostrarArticulos(){
             String redirecciona = "";
             listaArticulos();
-            redirecciona = "mostrarArticulosIH";
+            redirecciona = "administrarArticuloIH";
       return redirecciona;
       }
       
       
       
-      public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Articulo Editado", ((Articulo) event.getObject()).getIdarticulo().toString());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+      public String actualizar() {
+          Articulo tmp = new Articulo();
+          String redirecciona= "";
+          try {
+            //Articulo
+            tmp.setIdarticulo(idarticulo);
+            tmp.setDisponible(disponible);
+            tmp.setDescripcion(descripcion);
+            //tmp.setUsuario(usuario.getUsuario());
+            //tmp.setImagen(getMiImagen().getImagen());
+            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
+            //rutaimagen = getMiImagen().getRutaimagen();
+            tmp.setRutaimagen(rutaimagen);
+            //guardar string
+
+            ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+            articuloDAO.update(tmp);
+            
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se guardo correctamente"));
+            redirecciona = "administrarCuentaIH";
+        } catch (Exception e) {            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se ha guardado satisfactoriamente"));
+            redirecciona = "administrarArticuloIH";
+        }
+        return redirecciona;
     }
      
     public void onRowCancel(RowEditEvent event) {
@@ -519,20 +546,37 @@ public class MBArticulo implements Serializable{
         }
         return saludo;                
     }
+     * @param articulo
      * @return 
     */
     
-    public String eliminarArticulo(){
-        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-        //List<Articulo> lista2 = articuloDAO.findAll();
+    
+    public String deletearticulo(MBArticulo articulo) {
+		ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+                //List<Articulo> lista2 = articuloDAO.findAll();
         lista = listaArticulos();
         for (Articulo temp:  lista) {
+            if (articulo.idarticulo.equals((temp.getIdarticulo()))) {
+                articuloDAO.delete(temp);
+                break;
+            }
+            
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
+        return "administrarCuentaIH";
+	}
+    
+    public String eliminarArticulo(){
+        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+        List<Articulo> lista2 = articuloDAO.findAll();
+        //lista = listaArticulos();
+        for (Articulo temp:  lista2) {
             if (this.idarticulo.equals((temp.getIdarticulo()))) {
                 articuloDAO.delete(temp);
                 break;
             }
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
         }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
         return "administrarCuentaIH";
     }
 
@@ -545,8 +589,8 @@ public class MBArticulo implements Serializable{
                 articuloDAO.delete(temp);
                 break;
             }
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
         }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
         return "administrarCuentaIH";
     }
     
@@ -971,6 +1015,21 @@ public class MBArticulo implements Serializable{
     public void setMiImagen(MBImagen miImagen) {
         this.miImagen = miImagen;
     }
+
+    /**
+     * @return the articulo
+     */
+    public Articulo getArticulo() {
+        return articulo;
+    }
+
+    /**
+     * @param articulo the articulo to set
+     */
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
+    }
+
 
     
     
