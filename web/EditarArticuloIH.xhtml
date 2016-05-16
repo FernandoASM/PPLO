@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title> Editar Artículos </title>
+            </f:facet>
+        </h:head>
+<h:body>
+
+            <p:layout fullPage="true">
+            
+ 
+                <p:layoutUnit  position="north" size="160" resizable="true" closable="true" collapsible="true">
+                    <p:graphicImage value="resources/prestapalaorquesta.png" />
+            </p:layoutUnit>
+                <div id="cap">
+                    <img src="prestap'alaorquesta.png" width="200" height="100" alt="" />
+                </div>
+              <p:layoutUnit position="west" size="175" collapsible="true">
+                <h:form>
+                    <p:menu>
+                        <p:submenu label="Menú">
+                            <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
+                            <p:menuitem value="Música" action ="mostrarMusicaIH" />
+                            <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
+                            <p:menuitem value="Accesorios" action ="mostrarAccesoriosIH" />
+                          
+
+                        </p:submenu>
+
+                    </p:menu>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <h:form>
+                        <p:messages id="messages" showDetail="true"  closable="true" />
+                    <br/>
+                    <br/>
+                    <h:outputText value="Articulos" />
+
+    <h:dataTable value="#{mBArticulo.lista}" var="car">
+    			<!--styleClass="MBArticulo-table"
+    			headerClass="MBArticulo-table-header"
+    			rowClasses="MBArticulo-table-odd-row,MBArticulo-table-even-row" -->
+    		
+
+    		<h:column>    			
+    			<f:facet name="header">Id Articulo</f:facet>
+    			#{car.idarticulo} 
+                        
+    		</h:column>
+    			
+    		<h:column>
+    			
+    			<f:facet name="header">Descripción</f:facet>
+    			#{car.descripcion}
+    				
+    		</h:column>
+    			
+    		<h:column>
+    				
+    			<f:facet name="header">Disponibilidad</f:facet>
+    			#{car.disponible}
+    				
+    		</h:column>
+    			
+    		<h:column>
+                    <f:facet name="header">Imagen</f:facet> 
+                            <p:graphicImage value="resources/#{car.rutaimagen}"  />
+                        
+    				
+    		</h:column>
+                        
+    		
+                        <h:column>
+                                
+    				
+                    <f:facet name="header">Editar</f:facet>
+    				
+                    <h:commandLink value="Editar articulo" action="mostrarMusicaIH" />
+                        
+            </h:column>		
+                        
+                        
+    		<h:column>
+    				
+    			<f:facet name="header">Eliminar</f:facet>    				
+                        <p:commandButton value="Eliminar Articulo" action="mostrarMusicaIH"    />
+    			<!-- <h:commandLink value="Eliminar Articulo" 
+                                       action="  " /> -->
+    				
+    		</h:column>
+
+    		</h:dataTable>
+                    
+                    
+                    <br/>
+                    <br/>
+                    <p:commandButton action="administrarCuentaIH"  value="Regresar"   />
+                    <p:commandButton action="#{mBArticulo.update()}"  value="Guardar"   />
+                    <br/>
+                    <br/>
+                    
+                    
+                    
+                       </h:form>
+                </p:layoutUnit>
+
+
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>

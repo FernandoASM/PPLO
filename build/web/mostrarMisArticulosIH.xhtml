@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title> Editar Artículos </title>
+            </f:facet>
+        </h:head>
+<h:body>
+
+            <p:layout fullPage="true">
+            
+ 
+                <p:layoutUnit  position="north" size="170"  closable="true" >
+               
+                <p:graphicImage value="resources/prestapalaorquesta.png" />    
+                
+            </p:layoutUnit>
+                <div id="cap">
+                    <img src="prestap'alaorquesta.png" width="200" height="100" alt="" />
+                </div>
+              <p:layoutUnit position="west" size="175" collapsible="true">
+                <h:form>
+                    <p:menu>
+                        <p:submenu label="Menú">
+                            <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
+                            <p:menuitem value="Música" action ="mostrarMusicaIH" />
+                            <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
+                            <p:menuitem value="Accesorios" action ="mostrarAccesoriosIH" />
+                          
+
+                        </p:submenu>
+
+                    </p:menu>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <h:form id="form">
+                         <p:growl id="msgs" showDetail="true"/>
+                        <p:messages id="messages" showDetail="true"  closable="true" />
+                    <br/>
+                    <br/>
+                    <h:outputText value="Articulos" />
+
+                    <p:dataTable value="#{mBArticulo.lista}" var="car"  editable="true"  >
+                        <p:ajax event="rowEdit" listener="#{mBArticulo.onRowEdit(event)}" update=":form:msgs"  />
+                        <!--<p:ajax event="rowEditCancel" listener="{course.onRowCancel}" update=":form:msgs" />-->
+
+                        <p:column id="colId" filterBy="#{car.idarticulo}" sortBy="#{car.idarticulo}"
+                                                  headerText="ID Articulo" footerText="contains" 
+                                                  filterMatchMode="contains">
+                                            <h:outputText value="#{car.idarticulo}" />                    
+                                            
+                        </p:column>
+                        <p:column filterBy="#{car.descripcion}" headerText="Descripción" sortBy="#{car.descripcion}">
+                                            <p:cellEditor >
+                                             <f:facet name="output">  
+                                           <h:outputText value="#{car.descripcion}" />  
+                                                </f:facet>  
+                                                <f:facet name="input">  
+                            <p:inputText value="#{car.descripcion}" style="width:100%"/>  
+                                                </f:facet> 
+                                            </p:cellEditor>
+                       </p:column>
+                        
+                        <p:column filterBy="#{car.disponible}" headerText="Disponible" sortBy="#{car.disponible}">
+                                        <p:cellEditor >
+                                          <f:facet name="output">  
+                                        <h:outputText value="#{car.disponible}" />  
+                                                </f:facet>  
+                                                <f:facet name="input">  
+                         <p:inputText value="#{car.disponible}" style="width:100%"/>  
+                                                </f:facet> 
+                                            </p:cellEditor>
+                         </p:column>
+                        
+                        
+                      <h:column>
+                    <f:facet name="header">Imagen</f:facet> 
+                            <p:graphicImage value="resources/#{car.rutaimagen}"  />
+    		</h:column>
+         <p:column style="width:32px">
+       <p:rowEditor />
+
+         </p:column>
+
+
+    
+                    </p:dataTable>
+                    
+                    <br/>
+                    <br/>
+                    <p:commandButton action="administrarCuentaIH"  value="Regresar"   />
+                    <br/>
+                    <br/>
+                    
+                    
+                    
+                       </h:form>
+                </p:layoutUnit>
+
+
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
