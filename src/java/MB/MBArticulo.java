@@ -121,9 +121,15 @@ public class MBArticulo implements Serializable{
     private String marcaaccesorio;
     
     private List<Articulo> lista;
+<<<<<<< HEAD
     private List<Articulo> lista2;
     
     private final String destination="home/fernando/Descargas/2016-2/PPLO3";
+=======
+    
+    
+    private final String destination="C:\\Users\\Rodrigo\\Desktop\\";
+>>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
     
     
     private String msn;
@@ -376,6 +382,7 @@ public class MBArticulo implements Serializable{
         return getLista();
     }
       
+<<<<<<< HEAD
       public List<Articulo> listaArticulos2() {
           
         ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
@@ -392,6 +399,12 @@ public class MBArticulo implements Serializable{
       return redirecciona;
       
       }
+=======
+      
+      
+      
+      
+>>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
       
       public String mostrarArticulos(){
             String redirecciona = "";
@@ -1042,6 +1055,7 @@ public class MBArticulo implements Serializable{
         this.articulo = articulo;
     }
 
+<<<<<<< HEAD
     /**
      * @return the lista2
      */
@@ -1056,6 +1070,8 @@ public class MBArticulo implements Serializable{
         this.lista2 = lista2;
     }
 
+=======
+>>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
 
     
     
