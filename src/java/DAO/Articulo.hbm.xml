@@ -17,6 +17,12 @@
         <property name="descripcion" type="string">
             <column name="descripcion" length="1000" not-null="true" />
         </property>
+        <property name="rutaimagen" type="string">
+            <column name="rutaimagen" length="1000" not-null="true" />
+        </property>
+        <property name="imagen"  type="serializable" >
+            <column name="imagen"/>
+        </property>
         <set name="libros" table="libro" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="idarticulo" precision="131089" scale="0" not-null="true" />

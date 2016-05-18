@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 13/04/2016 04:25:15 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="DAO.Partitura" table="partitura" schema="public" optimistic-lock="version">
+        <id name="idpartitura" type="big_decimal">
+            <column name="idpartitura" precision="131089" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="articulo" class="DAO.Articulo" fetch="select">
+            <column name="idarticulo" precision="131089" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="nombreautor" type="string">
+            <column name="nombreautor" length="50" />
+        </property>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" />
+        </property>
+        <property name="genero" type="string">
+            <column name="genero" length="50" />
+        </property>
+        <property name="ano" type="date">
+            <column name="ano" length="13" />
+        </property>
+        <property name="tipo" type="string">
+            <column name="tipo" length="50" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

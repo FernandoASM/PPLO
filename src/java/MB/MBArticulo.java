@@ -13,6 +13,8 @@ import Controlador.SonidoDaoHibernate;
 import Controlador.AccesorioDaoHibernate;
 
 
+
+
 import DAO.Articulo;
 import DAO.Instrumento;
 import DAO.Libro;
@@ -20,22 +22,50 @@ import DAO.Usuario;
 import DAO.Musica;
 import DAO.Sonido;
 import DAO.Accesorio;
+import static com.sun.xml.internal.ws.api.pipe.Fiber.current;
+import static com.sun.xml.ws.api.pipe.Fiber.current;
+import java.io.ByteArrayInputStream;
         
         
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.Iterator;
+import static java.util.concurrent.ThreadLocalRandom.current;
+ 
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import org.primefaces.event.CellEditEvent;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import static org.hibernate.internal.util.io.StreamCopier.BUFFER_SIZE;
+ 
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.CroppedImage;
+import org.primefaces.event.RowEditEvent;
 
 
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 /**
  *
  * @author fernando
@@ -44,12 +74,16 @@ import org.primefaces.event.CellEditEvent;
 @RequestScoped  
 
 
-public class MBArticulo {
+public class MBArticulo implements Serializable{
     
     private Integer idarticulo;
     private boolean disponible;
     private String descripcion;
     private String categoria;
+    
+    private byte[] imagen;
+    
+    private String rutaimagen;
     
     //Istrumento
     private Integer idinstrumento;
@@ -86,14 +120,23 @@ public class MBArticulo {
     private String nombreaccesorio;
     private String marcaaccesorio;
     
+    private List<Articulo> lista;
+    private List<Articulo> lista2;
     
-     private List<Articulo> lista;
+    private final String destination="home/fernando/Descargas/2016-2/PPLO3";
+    
     
     private String msn;
     
+    private Articulo articulo;
+    
     @ManagedProperty("#{mBUsuario}")
     private MBUsuario usuario;
-
+    
+    @ManagedProperty("#{mBImagen}")
+    private MBImagen miImagen;
+    
+        
     /**
      * Creates a new instance of MBArticulo
      */
@@ -169,10 +212,157 @@ public class MBArticulo {
     public void setMsn(String msn) {
         this.msn = msn;
     }
-    public List<Articulo> listaArticulos() {
+    
+    
+    
+    
+    
+  
+    
+    //Subir Imagen
+    
+    
+ 
+    public void upload(FileUploadEvent event) {  
+        //FacesMessage msg = new FacesMessage("Success! ", event.getFile().getFileName() + " is uploaded.");  
+                //FacesContext.getCurrentInstance().addMessage(null, msg)
+        // Do what you want with the file      
+        
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext(); 
+		String txtField = ec.getRequestParameterMap().get("myform:txtField");
+                System.out.println(txtField);
+                this.rutaimagen = destination + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg
+        try {
+            copyFile(event.getFile().getFileName(), event.getFile().getInputstream());        
+            this.rutaimagen = destination + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
+            System.out.println("la ruta es " + rutaimagen);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
+            this.rutaimagen = destination + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
+        } catch (IOException e) {
+          //   FacesMessage message = new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded.");
+           // FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+             this.rutaimagen = destination + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
+
+    }  
+ 
+    public void copyFile(String fileName, InputStream in) {
+           try {
+               OutputStream out = new FileOutputStream(new File(destination + usuario.getCorreo()+ fileName ));
+              
+               int read = 0;
+                byte[] bytes = new byte[1024];
+              
+                while ((read = in.read(bytes)) != -1) {
+                    out.write(bytes, 0, read);
+                }
+                in.close();
+                out.flush();
+                out.close();
+                System.out.println("New file created!");
+                
+                /////////////////////////
+                
+                SessionFactory factory;
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            this.rutaimagen = destination + fileName; //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg" 
+            tx = session.beginTransaction();
+            String sql = "UPDATE Articulo set rutaimagen = :rutaimagen where idarticulo = :idarticulo";
+            Query query = session.createQuery(sql);
+            query.setParameter("rutaimagen", rutaimagen);
+            query.setParameter("idarticulo", idarticulo);
+            int result = query.executeUpdate();
+            System.out.println("Rows affected: " + result);            
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+                
+                
+                
+                } catch (IOException e) {
+                System.out.println(e.getMessage());
+                }
+    }
+    
+    
+    
+     public void imprime(List<Articulo> art){
+        for (Articulo temp : art) {
+            
+                System.out.println(temp.toString());
+            
+        }
+    }
+    
+     /*
+     public String guardaImagen(String fileName, byte[] bytes){
+         File f = null;
+         InputStream in = null;
+         try{
+             f= new File(destination + usuario.getCorreo()+ fileName);
+             //in = new ByteArrayInputStream(bytes);
+             ByteArrayInputStream inn = new ByteArrayInputStream(bytes);
+             System.out.println("Hasta aqui vas mejor");
+             FileOutputStream out = new FileOutputStream(f.getAbsolutePath());
+             int c = 0;
+             while ((c = inn.read()) >= 0){
+                 out.write(c);
+             }
+             out.flush();
+             out.close();
+             rutaimagen = destination + usuario.getCorreo()+ fileName;
+             
+                     SessionFactory factory;
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }             
+             
+         }catch(Exception e){
+             System.out.println("No se pudo cargar la imagen");
+         }
+             return rutaimagen;
+     }
+     
+     */
+     public void subiImagen (FileUploadEvent event){
+         try{
+             
+             System.out.println("Hasta aqui vas bien");
+     //        this.rutaimagen = guardaImagen(event.getFile().getFileName(),imagen);
+             copyFile(event.getFile().getFileName(),event.getFile().getInputstream());
+             this.imagen= event.getFile().getContents();
+
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
+         }catch(Exception e){
+             FacesMessage message = new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded.");
+             FacesContext.getCurrentInstance().addMessage(null, message);
+         }
+         
+         
+     }
+
+      public List<Articulo> listaArticulos() {
         ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-        lista = articuloDAO.findAll();
-        Iterator<Articulo>it = lista.iterator(); 
+        setLista((List<Articulo>) articuloDAO.findAll());
+        Iterator<Articulo>it = getLista().iterator(); 
         while(it.hasNext()){
             Articulo temp = it.next();
         if (!(this.usuario.getCorreo().equals(temp.getUsuario().getCorreo()))) {
@@ -182,35 +372,68 @@ public class MBArticulo {
          
         }
        
-        imprime(lista);
-        return lista;
+        imprime(getLista());
+        return getLista();
     }
-    
-    public void imprime(List<Articulo> art){
-        for (Articulo temp : art) {
-            
-                System.out.println(temp.toString());
-            
-        }
-    }
-     public String traeArticulos() {
+      
+      public List<Articulo> listaArticulos2() {
+          
         ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-        List<Articulo> lista = articuloDAO.findAll();
-       
-        for (Articulo temp : lista) {
-            System.out.println("hola");
-            if (this.usuario.getCorreo().equals(temp.getUsuario().getCorreo())) {
-                System.out.println(temp.toString());
-                this.idarticulo = temp.getIdarticulo();
-                this.disponible = temp.isDisponible();
-                this.descripcion = temp.getDescripcion();
-               
-                //break;
-            }
-
-        }
-        return "administrarCuentaIH";
+        
+        setLista2((List<Articulo>) articuloDAO.findAll());
+        imprime(getLista2());
+        return getLista2();
     }
+      
+      public String mostrarArticulos2(){
+            String redirecciona = "";
+            listaArticulos2();
+            redirecciona = "homeIH2";
+      return redirecciona;
+      
+      }
+      
+      public String mostrarArticulos(){
+            String redirecciona = "";
+            listaArticulos();
+            redirecciona = "administrarArticuloIH";
+      return redirecciona;
+      }
+      
+      
+      
+      public String actualizar() {
+          Articulo tmp = new Articulo();
+          String redirecciona= "";
+          try {
+            //Articulo
+            tmp.setIdarticulo(idarticulo);
+            tmp.setDisponible(disponible);
+            tmp.setDescripcion(descripcion);
+            //tmp.setUsuario(usuario.getUsuario());
+            //tmp.setImagen(getMiImagen().getImagen());
+            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
+            //rutaimagen = getMiImagen().getRutaimagen();
+            tmp.setRutaimagen(rutaimagen);
+            //guardar string
+
+            ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+            articuloDAO.update(tmp);
+            
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se guardo correctamente"));
+            redirecciona = "administrarCuentaIH";
+        } catch (Exception e) {            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se ha guardado satisfactoriamente"));
+            redirecciona = "administrarArticuloIH";
+        }
+        return redirecciona;
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Cancelar", ((Articulo) event.getObject()).getIdarticulo().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+      
 
     public void guarda() {
         Articulo tmp = new Articulo();
@@ -226,27 +449,31 @@ public class MBArticulo {
             tmp.setDisponible(disponible);
             tmp.setDescripcion(descripcion);
             tmp.setUsuario(usuario.getUsuario());
+            tmp.setImagen(getMiImagen().getImagen());
+            System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
+            rutaimagen = getMiImagen().getRutaimagen();
+            tmp.setRutaimagen(rutaimagen);
+            //guardar string
 
             ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
             articuloDAO.save(tmp);
             
            //Instrumento
 
-            if (idinstrumento != null){  
+            if (getIdinstrumento() != null){  
             InstrumentoDaoHibernate instrumentoDAO = new InstrumentoDaoHibernate();
             tmp1.setArticulo(tmp);
-            tmp1.setIdinstrumento(idinstrumento);
+            tmp1.setIdinstrumento(getIdinstrumento());
             tmp1.setNombreinstrumento(nombreinstrumento);
             tmp1.setMarca(marcainstrumento);
             tmp1.setAno(anoinstrumento);
             tmp1.setTipo(tipoinstrumento);
             instrumentoDAO.save(tmp1);
 
-            setMsn("El articulo se ha guardado satisfactoriamente");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se ha guardado satisfactoriamente"));
             }
             //Libro
             if (idlibro != null){  
-            setMsn("El articulo se ha creado satisfactoriamente");
             
             //Libro
             LibroDaoHibernate libroDAO = new LibroDaoHibernate();
@@ -259,11 +486,9 @@ public class MBArticulo {
             tmp2.setAno(anolibro);
             libroDAO.save(tmp2);
 
-            setMsn("El articulo se ha guardado satisfactoriamente");
-            }
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se ha guardado satisfactoriamente"));            }
             //Musica
             if (idmusica != null){  
-            setMsn("El articulo se ha creado satisfactoriamente");
             //Musica
 
             MusicaDaoHibernate musicaDAO = new MusicaDaoHibernate();
@@ -275,12 +500,10 @@ public class MBArticulo {
             tmp3.setAno(anomusica);
             musicaDAO.save(tmp3);
 
-            setMsn("El articulo se ha guardado satisfactoriamente");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se ha guardado satisfactoriamente"));
             }
             //Sonido
             if (idsonido != null){  
-
-            setMsn("El articulo se ha creado satisfactoriamente");
             //Sonido
             SonidoDaoHibernate sonidoDAO = new SonidoDaoHibernate();
             tmp4.setArticulo(tmp);
@@ -290,13 +513,10 @@ public class MBArticulo {
             tmp4.setPotencia(potenciasonido);
             tmp4.setTipo(tiposonido);
             sonidoDAO.save(tmp4);
-            setMsn("El articulo se ha guardado satisfactoriamente");}
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se ha guardado satisfactoriamente"));
+            }
             //Accesorio
             if (idaccesorio != null){  
-
-            setMsn("El articulo se ha creado satisfactoriamente");
-            //Accesorio
-
             AccesorioDaoHibernate accesorioDAO = new AccesorioDaoHibernate();
             tmp5.setArticulo(tmp);
             tmp5.setIdaccesorio(idaccesorio);
@@ -305,69 +525,89 @@ public class MBArticulo {
             tmp5.setTipo(tipoaccesorio);
             accesorioDAO.save(tmp5);
 
-            setMsn("El articulo se ha guardado satisfactoriamente");}
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se ha guardado satisfactoriamente"));
+            }
             
             
 
             
-            setMsn("El articulo se ha creado satisfactoriamente");
         } catch (Exception e) {
         e.printStackTrace();
             System.out.println("Hubo un error al intentar crear el articulo" + e);
         }
     }
     
-    public String actualizar() {
-        traeArticulos();
-        Articulo tmp = new Articulo();
-        
-        String redirecciona ="";
-        try {
-            tmp.setIdarticulo(idarticulo);
-            tmp.setDescripcion(descripcion);
-            tmp.setDisponible(disponible);
+    
+  /**  public String inicioSesion(){
 
-                       
-            ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-            articuloDAO.update(tmp);
-            
-           /* TelefonoDaoHibernate telefonoDao = new TelefonoDaoHibernate();
-            tmp1.setUsuario(tmp);
-            tmp1.setCorreo(correo);
-            tmp1.setTelefono(telefono);
-            telefonoDao.update(tmp1);
-            
-            ContrasenaDaoHibernate contrasenaDao = new ContrasenaDaoHibernate();
-            tmp2.setUsuario(tmp);
-            tmp2.setCorreo(correo);
-            tmp2.setContrasena(contrasena);
-            contrasenaDao.update(tmp2);
-
-            */
-            msn = "El árticulo se actualizó correctamente";
-            redirecciona = "administrarCuentaIH";
-        } catch (Exception e) {
-
-            msn = "upss! Ocurrio un error " + e;
-            System.out.println(" upss! Ocurrio un error.  " + e);
-            redirecciona = "mostrarArticulosIH";
+  List<Articulo> listUsuario;
+  UsuarioDaoHibernate usuarioDao = new UsuarioDaoHibernate();
+  listUsuario= usuarioDao.findAll();
+  String saludo = "";
+        for (Articulo usuario : listUsuario) {
+            System.out.println("AAA"+usuario.toString());
+         if(this.correo.equals(usuario.getCorreo()) && this.contrasena.equals(usuario.getContrasena().getContrasena())){
+             System.out.println(usuario.toString());
+        setMsn("Hola "+ usuario.getNombre() + " Bienvenido has iniciado Sesión" );
+        saludo= "administrarCuentaIH";            
+        break;
+            }else {
+                setMsn("Correo o contraseña incorrecta");
+                saludo= "index";                    
+          }    
         }
-        return redirecciona;
+        return saludo;                
     }
+     * @param articulo
+     * @return 
+    */
+    
+    
+    public String deletearticulo(MBArticulo articulo) {
+		ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+                //List<Articulo> lista2 = articuloDAO.findAll();
+        lista = listaArticulos();
+        for (Articulo temp:  lista) {
+            if (articulo.idarticulo.equals((temp.getIdarticulo()))) {
+                articuloDAO.delete(temp);
+                break;
+            }
+            
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
+        return "administrarCuentaIH";
+	}
     
     public String eliminarArticulo(){
         ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-        List<Articulo> lista = articuloDAO.findAll();
-        for (Articulo temp:  lista) {
+        List<Articulo> lista2 = articuloDAO.findAll();
+        //lista = listaArticulos();
+        for (Articulo temp:  lista2) {
             if (this.idarticulo.equals((temp.getIdarticulo()))) {
                 articuloDAO.delete(temp);
                 break;
             }
-                setMsn("El artículo ha sido eliminado");    
         }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
         return "administrarCuentaIH";
     }
 
+    public String eliminarArticuloDos(int idarticulodos){
+        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+        //List<Articulo> lista = articuloDAO.findAll();
+        lista = listaArticulos();
+        for (Articulo temp:  lista) {
+            if (idarticulodos == (temp.getIdarticulo())) {
+                articuloDAO.delete(temp);
+                break;
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
+        return "administrarCuentaIH";
+    }
+    
+    
+    
     /**
      * @return the usuario
      */
@@ -732,11 +972,92 @@ public class MBArticulo {
         this.marcaaccesorio = marcaaccesorio;
     }
 
-    
+    /**
+     * @return the rutaimagen
+     */
+    public String getRutaimagen() {
+        return rutaimagen;
+    }
+
+    /**
+     * @param rutaimagen the rutaimagen to set
+     */
+    public void setRutaimagen(String rutaimagen) {
+        this.rutaimagen = rutaimagen;
+    }
+
+    /**
+     * @return the lista
+     */
+    public List<Articulo> getLista() {
+        return lista;
+    }
+
+    /**
+     * @param lista the lista to set
+     */
+    public void setLista(List<Articulo> lista) {
+        this.lista = lista;
+    }
 
     /**
      * @return the imagen
      */
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    /**
+     * @param imagen the imagen to set
+     */
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
+
+    /**
+     * @return the miImagen
+     */
+    public MBImagen getMiImagen() {
+        return miImagen;
+    }
+
+    /**
+     * @param miImagen the miImagen to set
+     */
+    public void setMiImagen(MBImagen miImagen) {
+        this.miImagen = miImagen;
+    }
+
+    /**
+     * @return the articulo
+     */
+    public Articulo getArticulo() {
+        return articulo;
+    }
+
+    /**
+     * @param articulo the articulo to set
+     */
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
+    }
+
+    /**
+     * @return the lista2
+     */
+    public List<Articulo> getLista2() {
+        return lista2;
+    }
+
+    /**
+     * @param lista2 the lista2 to set
+     */
+    public void setLista2(List<Articulo> lista2) {
+        this.lista2 = lista2;
+    }
+
+
+    
     
 }
    

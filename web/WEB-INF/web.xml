@@ -4,6 +4,10 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    <context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>redmond</param-value>
+	</context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -21,4 +25,9 @@
     <welcome-file-list>
         <welcome-file>faces/homeIH.xhtml</welcome-file>
     </welcome-file-list>
+    <mime-mapping>
+<extension>jpg</extension>
+<mime-type>image/jpg</mime-type>
+</mime-mapping>
+
 </web-app>

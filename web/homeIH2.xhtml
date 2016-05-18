@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Página Principal</title>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit  position="north" size="170"  closable="true" >
+               
+                <p:graphicImage value="resources/prestapalaorquesta.png" />    
+                
+            </p:layoutUnit>
+            
+            
+            <p:layoutUnit position="east" size="200" closable="true" >
+                <h:form>
+                <h:panelGrid columns="1"  >
+                        <p:commandButton  value=" Iniciar Sesión " action="inicioSesionIH" styleClass="ui-priority-primary" />                   
+                        <br/>
+                        <p:commandButton value="Registrarse" action="registroIH" styleClass="ui-priority-primary" />
+                        
+                    </h:panelGrid>
+                    </h:form>
+                
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="175" collapsible="true">
+                <h:form>
+                    
+                    <p:menu>
+                        <p:submenu label="Menú">
+                            <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
+                            <p:menuitem value="Música" action ="mostrarMusicaIH" />
+                            <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
+                            <p:menuitem value="Accesorios" action ="mostrarAccesoriosIH" />
+                          
+
+                        </p:submenu>
+
+                    </p:menu>
+                    </h:form>
+                </p:layoutUnit>
+            
+
+                
+            <p:layoutUnit position = "center"   >
+                <p:messages id="messages" showDetail="true" autoUpdate="true"  closable="true" />
+                <h3> Presta Pa'la Orquesta </h3>
+                <br/>
+                <br/>
+                <h:form id="form">
+                         <p:growl id="msgs" showDetail="true"/>
+                        <p:messages id="messages" showDetail="true"  closable="true" />
+                    <br/>
+                    <br/>
+                    
+
+                    <p:carousel value="#{mBArticulo.lista2}" headerText="Articulos Disponibles" var="car" itemStyle="text-align:center">
+        <p:panelGrid columns="2" style="width:100%;margin:30px 10px" columnClasses="label,value" styleClass="ui-panelgrid-blank">
+            
+            <f:facet name="header">
+               <p:graphicImage value="resources/#{car.rutaimagen}"  />
+            </f:facet>
+ 
+            <h:outputText value="Id Artículo:" />
+            <h:outputText value="#{car.idarticulo}" />
+ 
+            <h:outputText value="Descripción" />
+            <h:outputText value="#{car.descripcion}" />
+ 
+            <h:outputText value="Disponible" />
+            <h:outputText value="#{car.disponible}"/>
+ 
+             <h:outputText value="Prestador" />
+             <h:outputText value="#{car.usuario.correo}"/>
+            
+        </p:panelGrid>
+ 
+        <f:facet name="footer">
+                Total
+        </f:facet>
+    </p:carousel>
+                    
+                    <br/>
+                    <br/>
+                   
+                       </h:form>
+
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+
+</html>

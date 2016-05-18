@@ -11,7 +11,7 @@
             </generator>
         </id>
         <one-to-one name="usuario" class="DAO.Usuario" constrained="true"></one-to-one>
-        <property name="telefono" type="int">
+        <property name="telefono" type="integer" >
             <column name="telefono" not-null="true" />
         </property>
     </class>

@@ -26,10 +26,10 @@
         <property name="delegacion" type="string">
             <column name="delegacion" length="30" />
         </property>
-        <property name="numero" type="java.lang.Integer">
+        <property name="numero" type="integer">
             <column name="numero" />
         </property>
-        <property name="codigopostal" type="java.lang.Integer">
+        <property name="codigopostal" type="integer">
             <column name="codigopostal" />
         </property>
         <set name="articulos" table="articulo" inverse="true" lazy="true" fetch="select">

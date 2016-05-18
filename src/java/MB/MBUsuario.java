@@ -13,10 +13,16 @@ import DAO.Usuario;
 
 import java.io.Serializable;
 import java.util.List;
+import javassist.bytecode.analysis.Util;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 //import javax.faces.context.FacesContext;
 //import javax.servlet.http.HttpServletRequest;
 //import javax.faces.bean.ViewScoped;
@@ -44,25 +50,26 @@ public class MBUsuario implements Serializable{
     private String calle;
     private String colonia;
     private String delegacion;
-    private int num;
-    private int codigopostal;
+    private Integer num;
+    private Integer codigopostal;
     
     private String contrasena;
-    private int telefono;
+    private Integer telefono;
     
     private String msn;
     
-  //  private final HttpServletRequest httpServletRequest;
-//    private final FacesContext faceContext;
+    
+    private final HttpServletRequest httpServletRequest;
+    private final FacesContext faceContext;
     
    private Usuario usuario;
  
 
-  //  public MBUsuario (){
+  public MBUsuario (){
     
-  //  faceContext = FacesContext.getCurrentInstance();
-//    httpServletRequest  = (HttpServletRequest)faceContext.getExternalContext().getRequest();
-//}
+    faceContext = FacesContext.getCurrentInstance();
+   httpServletRequest  = (HttpServletRequest)faceContext.getExternalContext().getRequest();
+}
     
     /**
      * @return the correo
@@ -165,28 +172,28 @@ public class MBUsuario implements Serializable{
     /**
      * @return the num
      */
-    public int getNum() {
+    public Integer getNum() {
         return num;
     }
 
     /**
      * @param num the num to set
      */
-    public void setNum(int num) {
+    public void setNum(Integer num) {
         this.num = num;
     }
 
     /**
      * @return the codigopostal
      */
-    public int getCodigopostal() {
+    public Integer getCodigopostal() {
         return codigopostal;
     }
 
     /**
      * @param codigopostal the codigopostal to set
      */
-    public void setCodigopostal(int codigopostal) {
+    public void setCodigopostal(Integer codigopostal) {
         this.codigopostal = codigopostal;
     }
     
@@ -207,14 +214,14 @@ public class MBUsuario implements Serializable{
     /**
      * @return the telefono
      */
-    public int getTelefono() {
+    public Integer getTelefono() {
         return telefono;
     }
 
     /**
      * @param telefono the telefono to set
      */
-    public void setTelefono(int telefono) {
+    public void setTelefono(Integer telefono) {
         this.telefono = telefono;
     }
     
@@ -263,11 +270,11 @@ public class MBUsuario implements Serializable{
             tmp2.setContrasena(contrasena);
             contrasenaDao.save(tmp2);
             
-            setMsn("La cuenta se ha creado satisfactoriamente.");
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La cuenta se ha creado satisfactoriamente"));
             redirecciona = "inicioSesionIH";
         } catch (Exception e) {
-            System.out.println("Hubo un error al intentar crear la cuenta" + e);
-            setMsn("Datos invalidos, vuelva a intentarlo");    
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "El correo " +correo + " tiene una cuenta asignada."));
             redirecciona = "registroIH";
         }
         
@@ -306,8 +313,7 @@ public class MBUsuario implements Serializable{
             tmp2.setContrasena(contrasena);
             contrasenaDao.update(tmp2);
 
-            
-            msn = "El usuario se guardo correctamente";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El usuario se guardo correctamente"));
             redirecciona = "administrarCuentaIH";
         } catch (Exception e) {
 
@@ -325,6 +331,7 @@ public class MBUsuario implements Serializable{
   UsuarioDaoHibernate usuarioDao = new UsuarioDaoHibernate();
   listUsuario= usuarioDao.findAll();
   String saludo = "";
+  String nada ="";
         for (Usuario usuarioD : listUsuario) {
          if(this.correo.equals(usuarioD.getCorreo()) && this.contrasena.equals(usuarioD.getContrasena().getContrasena())){
              System.out.println(usuarioD.toString());
@@ -340,15 +347,20 @@ public class MBUsuario implements Serializable{
             this.telefono = usuarioD.getTelefono().getTelefono();
             
             usuario = new Usuario(usuarioD.getCorreo(),usuarioD.getNombre(),usuarioD.getApematerno(),usuarioD.getApematerno(),usuarioD.getCalle(),usuarioD.getColonia(),usuarioD.getDelegacion(),usuarioD.getNumero(),usuarioD.getCodigopostal(),usuarioD.getTelefono(), usuarioD.getContrasena());
-            
-        setMsn("Hola "+ usuarioD.getNombre() + " has iniciado Sesión" );
-        saludo= "administrarCuentaIH";            
+        
+            //httpServletRequest.getSession().setAttribute("sessionUsuario", usuario);
+            //faceContext.addMessage("sessionUsuario", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Hola "+ usuarioD.getNombre() + " has iniciado Sesión"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Hola "+ usuarioD.getNombre() + " has iniciado Sesión"));
+            saludo= "administrarCuentaIH";            
         
         break;
             }else {
-                setMsn("Correo o contraseña incorrecta");
-                saludo= "inicioSesionIH";                    
-          }    
+             
+            saludo= "inicioSesionIH";                    
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Correo o Contraseña incorrecta"));
+            
+          }
+         
         }
         return saludo;                
     }
@@ -357,8 +369,8 @@ public class MBUsuario implements Serializable{
     
     public String cerrarSesion(){
 //        httpServletRequest.getSession().removeAttribute("sessionUsuario");
-        setMsn("Sesión Cerrada correctamente");
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Sesión Cerrada correctamente"));
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();        
         return "homeIH";
     }
     
@@ -370,11 +382,14 @@ public class MBUsuario implements Serializable{
             if (this.correo.equals((temp.getCorreo()))) {
                 usuarioDAO.delete(temp);
                 break;
-            }
-            setMsn("La cuenta ha sido eliminada");    
+            }   
+            
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            
                 
-        }return "homeIH";
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La cuenta ha sido eliminada"));
+        return "homeIH";
         
     }
     
