@@ -237,11 +237,13 @@
                 </h:form>
                     
                      <h:form enctype="multipart/form-data">
+                         <p:growl id="messages" />
                             <h:panelGrid columns="3" cellpadding="5">
                      <h:outputText value="Imagen : " />
                      <p:fileUpload fileUploadListener="#{mBImagen.subiImagen}" 
                                           allowTypes="/(\.|\/)(gif|jpe?g|png|jpg)$/"
-                                      sizeLimit="100000" value="Select Images"/>
+                                      sizeLimit="100000" value="Select Images"
+                                      update="messages"/>
                             </h:panelGrid>
                             </h:form>
                     

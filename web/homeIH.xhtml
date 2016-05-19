@@ -51,16 +51,28 @@
                 
             <p:layoutUnit position = "center"   >
                 <p:messages id="messages" showDetail="true" autoUpdate="true"  closable="true" />
-                <h:outputText value ="Presta Pala Orquesta" />
+                <h:outputText value ="¿Te interesa pedir prestado algún instrumento?" />
                 <br/>
                 <br/>
                 <h:form>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-
+                <!--
+                
+                    <p:dataScroller value="{mBArticulo.listaTodo}"  rows="4" var="car" chunkSize="10">
+        <f:facet name="header">
+            
+        </f:facet>
+ 
+        <h:panelGrid columns="1" style="width:100%" columnClasses="logo,detail">
+            <p:graphicImage value="resources/{car.rutaimagen}" style="width:35%" />
+ 
+            <p:outputPanel>
+                <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputText value="{car.descripcion}" style="font-weight: bold"/>
+                </h:panelGrid>
+            </p:outputPanel>
+        </h:panelGrid>
+    </p:dataScroller>
+-->
 
                 </h:form>
 

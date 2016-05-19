@@ -72,7 +72,8 @@ public class Imagen implements Serializable{
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());        
             this.setRutaimagen(getDestination() + event.getFile().getFileName()); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
             System.out.println("la ruta es " + getRutaimagen());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
+            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
             this.setRutaimagen(getDestination() + event.getFile().getFileName()); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
         } catch (IOException e) {
           //   FacesMessage message = new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded.");
@@ -98,7 +99,7 @@ public class Imagen implements Serializable{
                 System.out.println("New file created!");
                 
                 /////////////////////////
-                
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("La imagen " +fileName+ " se ha guardado satisfactoriamente"));
                 SessionFactory factory;
         try {
             factory = new Configuration().configure().buildSessionFactory();
@@ -185,10 +186,9 @@ public class Imagen implements Serializable{
      //        this.rutaimagen = guardaImagen(event.getFile().getFileName(),imagen);
              copyFile(event.getFile().getFileName(),event.getFile().getInputstream());
              this.setImagen(event.getFile().getContents());
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
          }catch(Exception e){
-             FacesMessage message = new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded.");
-             FacesContext.getCurrentInstance().addMessage(null, message);
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded."));
          }
          
          

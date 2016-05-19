@@ -92,7 +92,14 @@
     		<h:column>
     				
     			<f:facet name="header">Eliminar</f:facet>    				
-                        <p:commandButton value="Eliminar Articulo" action="mostrarMusicaIH"    />
+                        <p:commandButton value="Eliminar Articulo" action="mostrarMusicaIH"    
+                        <p:confirm header="Eliminar Articulo" message="¿Estas seguro que quieres eliminar el articulo?" icon="ui-icon-alert" />
+                                         ></p:commandButton>
+                        
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"  />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
+                            </p:confirmDialog>
     			<!-- <h:commandLink value="Eliminar Articulo" 
                                        action="  " /> -->
     				

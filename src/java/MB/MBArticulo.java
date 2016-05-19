@@ -44,6 +44,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import static java.util.concurrent.ThreadLocalRandom.current;
+import javax.annotation.PostConstruct;
  
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -66,6 +67,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.primefaces.event.CellEditEvent;
 /**
  *
  * @author fernando
@@ -121,6 +123,8 @@ public class MBArticulo implements Serializable{
     private String marcaaccesorio;
     
     private List<Articulo> lista;
+    
+    private List<Articulo> listaTodo;
     
     
     private final String destination="C:\\Users\\Rodrigo\\Desktop\\";
@@ -271,17 +275,17 @@ public class MBArticulo implements Serializable{
             throw new ExceptionInInitializerError(ex);
         }
 
+        
+        
         Session session = factory.openSession();
         Transaction tx = null;
         try {
             this.rutaimagen = destination + fileName; //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg" 
             tx = session.beginTransaction();
-            String sql = "UPDATE Articulo set rutaimagen = :rutaimagen where idarticulo = :idarticulo";
+            String sql = "Select * from Articulo where disponible ='false'";
             Query query = session.createQuery(sql);
-            query.setParameter("rutaimagen", rutaimagen);
-            query.setParameter("idarticulo", idarticulo);
             int result = query.executeUpdate();
-            System.out.println("Rows affected: " + result);            
+            
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -372,18 +376,32 @@ public class MBArticulo implements Serializable{
          
         }
        
+        
+        
         imprime(getLista());
         return getLista();
     }
       
       
+            public List<Articulo> listaTodosArticulos() {
+        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+        setListaTodo((List<Articulo>) articuloDAO.findAll());
+        imprime(getListaTodo());
+        return getListaTodo();
+    }
+       
+       
+       @PostConstruct
+    public void init() {
+        lista= listaArticulos();
+        listaTodo = listaTodosArticulos();
+    }
       
-      
-      
+    
       
       public String mostrarArticulos(){
             String redirecciona = "";
-            listaArticulos();
+            lista= listaArticulos();
             redirecciona = "administrarArticuloIH";
       return redirecciona;
       }
@@ -391,35 +409,81 @@ public class MBArticulo implements Serializable{
       
       
       public String actualizar() {
-          Articulo tmp = new Articulo();
           String redirecciona= "";
+         
           try {
+              ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+         for (Articulo articulos : lista) {     
+             System.out.println("dentro del for");
             //Articulo
-            tmp.setIdarticulo(idarticulo);
+            //articulos.setIdarticulo(articulos.getIdarticulo());
+            //articulos.setDisponible(articulos.isDisponible());
+            //articulos.setDescripcion(articulos.getDescripcion());
+            //articulos.setUsuario(articulos.getUsuario());
+            //tmp.setImagen(getMiImagen().getImagen());
+            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
+            //rutaimagen = getMiImagen().getRutaimagen();
+            //articulos.setRutaimagen(articulos.getRutaimagen());
+            //guardar string
+
+            
+            articuloDAO.update(articulos);
+            
+            
+         }System.out.println("fuera del for");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se guardo correctamente"));
+            redirecciona = "administrarCuentaIH";
+        } catch (Exception e) {            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Hubo un error al intentar guardar el articulo"));
+            redirecciona = "administrarArticuloIH";
+            }
+              return redirecciona;
+    }
+      
+      public void onCellEdit(CellEditEvent event) {
+        Articulo tmp = new Articulo();
+     
+            //tmp.setIdarticulo(idarticulo);
             tmp.setDisponible(disponible);
             tmp.setDescripcion(descripcion);
             //tmp.setUsuario(usuario.getUsuario());
             //tmp.setImagen(getMiImagen().getImagen());
             //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
-            //rutaimagen = getMiImagen().getRutaimagen();
-            tmp.setRutaimagen(rutaimagen);
+            //tmp.setRutaimagen(rutaimagen);
+            //guardar string,
+            actualizar();
+            //ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+            //articuloDAO.update(tmp);
+              System.out.println("El articulo se guardo correctamente");            
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Articulo Actualizado"));
+        
+        
+    }
+          
+     
+      
+      
+      public void onRowEdit(RowEditEvent event) {
+        Articulo tmp = new Articulo();
+     
+            tmp.setIdarticulo(idarticulo);
+            tmp.setDisponible(disponible);
+            tmp.setDescripcion(descripcion);
+            tmp.setUsuario(usuario.getUsuario());
+            //tmp.setImagen(getMiImagen().getImagen());
+            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
+            //tmp.setRutaimagen(rutaimagen);
             //guardar string
-
+            
             ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
             articuloDAO.update(tmp);
-            
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se guardo correctamente"));
-            redirecciona = "administrarCuentaIH";
-        } catch (Exception e) {            
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se ha guardado satisfactoriamente"));
-            redirecciona = "administrarArticuloIH";
-        }
-        return redirecciona;
+              System.out.println("El articulo se guardo correctamente");            
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("El articulo se guardo correctamente"));
+              
     }
-     
+      
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Cancelar", ((Articulo) event.getObject()).getIdarticulo().toString());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Operacion cancelada"));
     }
       
 
@@ -551,12 +615,12 @@ public class MBArticulo implements Serializable{
     */
     
     
-    public String deletearticulo(MBArticulo articulo) {
+    public String deletearticulo(Integer idart) {
 		ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
                 //List<Articulo> lista2 = articuloDAO.findAll();
         lista = listaArticulos();
         for (Articulo temp:  lista) {
-            if (articulo.idarticulo.equals((temp.getIdarticulo()))) {
+            if (idart == temp.getIdarticulo()) {
                 articuloDAO.delete(temp);
                 break;
             }
@@ -1028,6 +1092,20 @@ public class MBArticulo implements Serializable{
      */
     public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
+    }
+
+    /**
+     * @return the listaTodo
+     */
+    public List<Articulo> getListaTodo() {
+        return listaTodo;
+    }
+
+    /**
+     * @param listaTodo the listaTodo to set
+     */
+    public void setListaTodo(List<Articulo> listaTodo) {
+        this.listaTodo = listaTodo;
     }
 
 

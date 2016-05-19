@@ -24,7 +24,7 @@
             </p:layoutUnit>
               
               <p:layoutUnit position="west" size="175" collapsible="true">
-                <h:form>
+<!--                <h:form>
                     <p:menu>
                         <p:submenu label="Menú">
                             <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
@@ -36,48 +36,98 @@
                         </p:submenu>
 
                     </p:menu>
-                    </h:form>
+                    </h:form>-->
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
-                    <h:form>
-                        <p:messages id="messages" showDetail="true"  closable="true" />
-                    <br/>
-                    <br/>
-                    <h:outputText value="Articulos" />
+                    <h:form id="myform">
+                        <p:growl id="messages" />
+<!--                        <p:messages id="messages" showDetail="true"  closable="true" />-->
+                    
+                    
+                    <p:contextMenu for="lista" widgetVar="cMenu">   
+                        <p:menuitem value="Edit Cell" icon="ui-icon-search" onclick="PF('cellCars').showCellEditor();return false;"/>  
+                    <p:menuitem value="Hide Menu" icon="ui-icon-close" onclick="PF('cMenu').hide()"/>  
+                </p:contextMenu> 
+                    
 
-    <h:dataTable value="#{mBArticulo.lista}" var="car" >
-      
-         <h:column>    				
-            <f:facet name="header">IDArticulo</f:facet>    				
-            <p:inputText value="#{car.idarticulo}"
-               size="10" />
-         </h:column>
-         <h:column>
-            <f:facet name="header">Descripción</f:facet>
-            <p:inputText value="#{car.descripcion}" 
-               size="20"  />
-         </h:column>
-         <h:column>
-            <f:facet name="header">Diponible</f:facet>
-            <h:inputText value="#{car.disponible}" size="5" />
-         </h:column>
-         <h:column>
-            <f:facet name="header">Imagen</f:facet> 
-                            <p:graphicImage value="resources/#{car.rutaimagen}"  />
+<p:dataTable  id="lista" value="#{mBArticulo.lista}"  var="car" editable="true"   editMode="cell"  sortOrder =""  widgetVar="cellCars">
+                <f:facet name="header">
+                        Mis articulos
+                   </f:facet>
+        
+                        <p:ajax event="cellEdit" listener="#{mBArticulo.onCellEdit(event)}" update=":myform:messages"  />
+<!--                        <p:ajax event="rowEdit" listener="{mBArticulo.onRowEdit(event)}" update=":myform:messages" />
+                        <p:ajax event="rowEditCancel" listener="{mBArticulo.onRowCancel(event)}" update=":myform:messages"  />-->
+        
+       
+       
+       
                         
-         </h:column>
-        <h:column>
-            <f:facet name="header">Guardar</f:facet> 
-            <h:commandLink action="#{mBArticulo.actualizar()}" value  ="Guardar"></h:commandLink>                
-            <p:commandButton action="#{mBArticulo.actualizar()}" value  ="Guardar"></p:commandButton>
-         </h:column>
-        <h:commandLink actionListener="#{mBArticulo.actualizar()}" value  ="Guardar" ></h:commandLink>               
-      </h:dataTable>  
+       <p:column headerText="Id Articulo">
+           <p:cellEditor>
+               <f:facet  name="output"><h:outputText value="#{car.idarticulo}"  /></f:facet>
+               <f:facet name="input"><p:inputText value="#{car.idarticulo}"  /></f:facet>
+                  </p:cellEditor>
+       </p:column>
+                         
+       
+       
+       <p:column headerText="Descripción">
+           <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{car.descripcion}" /></f:facet>
+               <f:facet name="input"><p:inputText  value="#{car.descripcion}"  /></f:facet>
+           </p:cellEditor>
+       </p:column>
+         
+         
+       
+       <p:column headerText="Disponible">
+           
+               <p:selectBooleanCheckbox value="#{car.disponible}" ></p:selectBooleanCheckbox>
+           
+       </p:column>
+         
+         <p:column>
+            <f:facet name="header">Imagen</f:facet> 
+            <p:graphicImage value="resources/#{car.rutaimagen}"  style="width:100%" />   
+            
+         </p:column>
+
+                    
+    		<p:column>
+    				
+    			<f:facet name="header">Eliminar</f:facet>    				
+                        <p:commandButton action="#{mBArticulo.eliminarArticuloDos(car.idarticulo)}" value="Eliminar Articulo"  >
+                                          <p:confirm header="Eliminar Articulo" message="¿Estas seguro que quieres eliminar el articulo?" icon="ui-icon-alert" />
+                                         </p:commandButton>
+                        
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"  />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
+                            </p:confirmDialog>
+    			<!-- <h:commandLink value="Eliminar Articulo" 
+                                       action="  " /> -->
+    				
+    		</p:column>
+<!--       <f:facet name="output"><h:outputText value="{mBArticulo.rutaimagen}" /></f:facet>
+                    <p:column>
+             <p:cellEditor>
+            <f:facet name="header">Imagen</f:facet> 
+            <f:facet name="output"><h:outputText value="{car.rutaimagen}" /></f:facet>
+            <f:facet name="input"><p:inputText  value="{mBArticulo.rutaimagen}" /></f:facet>
+            </p:cellEditor>
+         </p:column>-->
+       
+                        
+<!--<p:column style="width:32px">
+           <p:rowEditor   />
+       </p:column>-->
+     </p:dataTable>
 	  <br/>
                     <br/>
                     <br/>
+                    <p:commandButton action="#{mBArticulo.actualizar()}"  value="Guardar Cambios"  update="messages" />
                     <p:commandButton action="administrarCuentaIH"  value="Regresar"   />
-                    <p:commandButton action="#{mBArticulo.actualizar()}"  value="Guardar"   />
                     <br/>
                     <br/>
                     
