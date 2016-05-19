@@ -123,11 +123,17 @@ public class MBArticulo implements Serializable{
     private String marcaaccesorio;
     
     private List<Articulo> lista;
+<<<<<<< HEAD
+    private List<Articulo> lista2;
+    
+    private final String destination="home/fernando/Descargas/2016-2/PPLO3";
+=======
     
     private List<Articulo> listaTodo;
     
     
     private final String destination="C:\\Users\\Rodrigo\\Desktop\\";
+>>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
     
     
     private String msn;
@@ -382,6 +388,24 @@ public class MBArticulo implements Serializable{
         return getLista();
     }
       
+<<<<<<< HEAD
+      public List<Articulo> listaArticulos2() {
+          
+        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+        
+        setLista2((List<Articulo>) articuloDAO.findAll());
+        imprime(getLista2());
+        return getLista2();
+    }
+      
+      public String mostrarArticulos2(){
+            String redirecciona = "";
+            listaArticulos2();
+            redirecciona = "homeIH2";
+      return redirecciona;
+      
+      }
+=======
       
             public List<Articulo> listaTodosArticulos() {
         ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
@@ -397,7 +421,13 @@ public class MBArticulo implements Serializable{
         listaTodo = listaTodosArticulos();
     }
       
+<<<<<<< HEAD
     
+=======
+      
+      
+>>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
+>>>>>>> 013f0cd52d0cbc2729ce89f7e5c504dc5e753e13
       
       public String mostrarArticulos(){
             String redirecciona = "";
@@ -1094,6 +1124,7 @@ public class MBArticulo implements Serializable{
         this.articulo = articulo;
     }
 
+<<<<<<< HEAD
     /**
      * @return the listaTodo
      */
@@ -1108,6 +1139,25 @@ public class MBArticulo implements Serializable{
         this.listaTodo = listaTodo;
     }
 
+=======
+<<<<<<< HEAD
+    /**
+     * @return the lista2
+     */
+    public List<Articulo> getLista2() {
+        return lista2;
+    }
+
+    /**
+     * @param lista2 the lista2 to set
+     */
+    public void setLista2(List<Articulo> lista2) {
+        this.lista2 = lista2;
+    }
+
+=======
+>>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
+>>>>>>> 013f0cd52d0cbc2729ce89f7e5c504dc5e753e13
 
     
     
