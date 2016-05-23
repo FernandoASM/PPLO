@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title> Solicitar Prestamo </title>
+            </f:facet>
+        </h:head>
+<h:body>
+
+            <p:layout fullPage="true">
+            
+ 
+                <p:layoutUnit  position="north" size="170"  closable="true" >
+               
+                <p:graphicImage value="resources/prestapalaorquesta.png" />    
+                
+            </p:layoutUnit>
+              
+              <p:layoutUnit position="west" size="175" collapsible="true">
+                <h:form>
+                    <p:menu>
+                        <p:submenu label="Menú">
+                            <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
+                            <p:menuitem value="Música" action ="mostrarMusicaIH" />
+                            <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
+                            <p:menuitem value="Accesorios" action ="mostrarAccesoriosIH" />
+                          
+
+                        </p:submenu>
+
+                    </p:menu>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <h:form>
+                        Solicitud de Prestamo
+                        <h:panelGrid columns="1">
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        
+                        Datos del Artículo
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p:graphicImage value="resources/#{mBSolicitarArticulo.articulo.rutaimagen}"  style="width:75%" />   
+                        <h:outputText value ="#{mBSolicitarArticulo.articulo.descripcion}" ></h:outputText>
+                        <br/>
+                        <br/>
+                        Datos del Prestador
+                        <br/>
+                        <h:outputText value="Nombre : " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuario.nombre}" ></h:outputText>
+<!--                        <h:outputText value="Apellido Paterno : " />
+                        <h:outputText value ="{mBSolicitarArticulo.usuario.apepaterno}" ></h:outputText>
+                        <h:outputText value="Apellido Materno : " />
+                        <h:outputText value ="{mBSolicitarArticulo.usuario.apematerno}" ></h:outputText>
+                        <h:outputText value="Calle : " />
+                        <h:outputText value ="{mBSolicitarArticulo.usuario.calle}" ></h:outputText>
+                        <h:outputText value="Número : " />
+                        <h:outputText value ="{mBSolicitarArticulo.usuario.numero}" ></h:outputText>
+                        <h:outputText value="Colonia : " />
+                        <h:outputText value ="{mBSolicitarArticulo.usuario.colonia}" ></h:outputText>
+                        <h:outputText value="Delegación : " />
+                        <h:outputText value ="{mBSolicitarArticulo.usuario.delegacion}" ></h:outputText>
+                        <h:outputText value="Código Postal : " />
+                        <h:outputText value ="{mBSolicitarArticulo.usuario.codigopostal}" ></h:outputText>-->
+                        
+                        <br/>
+                        
+                        </h:panelGrid>
+                        
+                    
+                    
+                       </h:form>
+                </p:layoutUnit>
+
+
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
+
