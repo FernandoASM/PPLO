@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Página Principal</title>
+        <title>Presta Pa'la Orquesta</title>
     </h:head>
     <h:body>
         <p:layout fullPage="true">
@@ -47,62 +47,43 @@
                     </h:form>
                 </p:layoutUnit>
             
+            
 
                 
             <p:layoutUnit position = "center"   >
                 <p:messages id="messages" showDetail="true" autoUpdate="true"  closable="true" />
-<<<<<<< HEAD
-                <h:outputText value ="¿Te interesa pedir prestado algún instrumento?" />
-                <br/>
-                <br/>
+                ¿Te interesa pedir prestado un instrumento?
                 <h:form>
-                <!--
-                
-                    <p:dataScroller value="{mBArticulo.listaTodo}"  rows="4" var="car" chunkSize="10">
-        <f:facet name="header">
-            
-        </f:facet>
+<!--                    <p:carousel value="{mBSolicitarArticulo.listaTodo}" headerText="¿Te interesa pedir prestado un instrumento?" var="car" itemStyle="text-align:center" >
+        <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" styleClass="ui-panelgrid-blank">
+            <f:facet name="header">
+                <p:graphicImage value="resources/{car.rutaimagen}"  style="width:75%" />  
+            </f:facet>
  
-        <h:panelGrid columns="1" style="width:100%" columnClasses="logo,detail">
-            <p:graphicImage value="resources/{car.rutaimagen}" style="width:35%" />
+            <h:outputText value="{car.descripcion}" ></h:outputText>
+           <p:commandButton  value="Solicitar Artículo"/>
+        </p:panelGrid>
  
-            <p:outputPanel>
-                <h:panelGrid columns="2" cellpadding="5">
-                        <h:outputText value="{car.descripcion}" style="font-weight: bold"/>
-                </h:panelGrid>
-            </p:outputPanel>
-        </h:panelGrid>
-    </p:dataScroller>
--->
+    </p:carousel>
+-->                     <br/>
+                    <h:dataTable  value="#{mBSolicitarArticulo.listaTodo}"  var="car" >  
+         
+         <h:column>
+            <p:graphicImage value="resources/#{car.rutaimagen}"  style="width:75%" />   
+         </h:column>    
+                        <h:column>
+                            <h:outputText value="#{car.descripcion}"  style="width:75%" />   
+         </h:column> 
+                        
+<!--                        <h:column>
+                            <h:outputText value="{car.usuarioe}"  style="width:75%" />   
+         </h:column> -->
+                        <h:column>
+                            <p:commandButton  action = "#{mBSolicitarArticulo.solicitarPrestamo(car)}" value="Solicitar Prestamo"/>
+                   </h:column>
+     </h:dataTable>
 
                 </h:form>
-=======
-<<<<<<< HEAD
-                <h3> Presta Pa'la Orquesta </h3>
-                <br/>
-                <br/>
-                <h:form id="form">
-                         <p:growl id="msgs" showDetail="true"/>
-                        <p:messages id="messages" showDetail="true"  closable="true" />
-                    <br/>
-                    <br/>
-                    <p:commandButton action="#{mBArticulo.mostrarArticulos2()}"  value="Lista de Artículos"   />
-
-                                      
-=======
-                <h:outputText value ="Presta Pala Orquesta" />
-                <br/>
-                <br/>
-                <h:form>
-                    <br/>
-                    <br/>
-                    <br/>
->>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
-                    <br/>
-                    <br/>
-                   
-                       </h:form>
->>>>>>> 013f0cd52d0cbc2729ce89f7e5c504dc5e753e13
 
             </p:layoutUnit>
 

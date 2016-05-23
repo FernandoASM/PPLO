@@ -123,20 +123,15 @@ public class MBArticulo implements Serializable{
     private String marcaaccesorio;
     
     private List<Articulo> lista;
-<<<<<<< HEAD
-    private List<Articulo> lista2;
-    
-    private final String destination="home/fernando/Descargas/2016-2/PPLO3";
-=======
     
     private List<Articulo> listaTodo;
     
     
     private final String destination="C:\\Users\\Rodrigo\\Desktop\\";
->>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
     
     
     private String msn;
+    
     
     private Articulo articulo;
     
@@ -282,7 +277,6 @@ public class MBArticulo implements Serializable{
         }
 
         
-        
         Session session = factory.openSession();
         Transaction tx = null;
         try {
@@ -350,8 +344,43 @@ public class MBArticulo implements Serializable{
          }
              return rutaimagen;
      }
+
+     
+     
      
      */
+     
+     public List<Articulo> articulosDisponible(){
+                    SessionFactory factory;
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            String sql = "Select * from Articulo where disponible ='true'";
+            SQLQuery query = session.createSQLQuery(sql);            
+            query.addEntity(Articulo.class);
+            listaTodo = query.list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+return listaTodo;
+     }
+     
+     
      public void subiImagen (FileUploadEvent event){
          try{
              
@@ -379,55 +408,27 @@ public class MBArticulo implements Serializable{
                /// System.out.println(temp.toString());
                 it.remove();
             }
-         
         }
-       
-        
-        
         imprime(getLista());
         return getLista();
     }
       
-<<<<<<< HEAD
-      public List<Articulo> listaArticulos2() {
-          
-        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-        
-        setLista2((List<Articulo>) articuloDAO.findAll());
-        imprime(getLista2());
-        return getLista2();
-    }
       
-      public String mostrarArticulos2(){
-            String redirecciona = "";
-            listaArticulos2();
-            redirecciona = "homeIH2";
-      return redirecciona;
-      
-      }
-=======
-      
-            public List<Articulo> listaTodosArticulos() {
-        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-        setListaTodo((List<Articulo>) articuloDAO.findAll());
-        imprime(getListaTodo());
-        return getListaTodo();
-    }
-       
-       
+//            public List<Articulo> listaTodosArticulos() {
+//        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
+//        setListaTodo((List<Articulo>) articuloDAO.findAll());
+//        imprime(getListaTodo());
+//        return getListaTodo();
+//    }
+//       
+//       
        @PostConstruct
     public void init() {
-        lista= listaArticulos();
-        listaTodo = listaTodosArticulos();
+        lista = listaArticulos();
+        
     }
       
-<<<<<<< HEAD
     
-=======
-      
-      
->>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
->>>>>>> 013f0cd52d0cbc2729ce89f7e5c504dc5e753e13
       
       public String mostrarArticulos(){
             String redirecciona = "";
@@ -1124,7 +1125,6 @@ public class MBArticulo implements Serializable{
         this.articulo = articulo;
     }
 
-<<<<<<< HEAD
     /**
      * @return the listaTodo
      */
@@ -1139,25 +1139,6 @@ public class MBArticulo implements Serializable{
         this.listaTodo = listaTodo;
     }
 
-=======
-<<<<<<< HEAD
-    /**
-     * @return the lista2
-     */
-    public List<Articulo> getLista2() {
-        return lista2;
-    }
-
-    /**
-     * @param lista2 the lista2 to set
-     */
-    public void setLista2(List<Articulo> lista2) {
-        this.lista2 = lista2;
-    }
-
-=======
->>>>>>> 359244ffd01e7bda827e4fbf78620c27a19080e7
->>>>>>> 013f0cd52d0cbc2729ce89f7e5c504dc5e753e13
 
     
     

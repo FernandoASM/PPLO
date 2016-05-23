@@ -49,7 +49,7 @@ public class ArticuloDaoHibernate extends AbstractDao {
      * @param id
      * @return
      */
-    public Articulo find(Long id) throws DataAccessLayerException {
+    public Articulo find(Integer id) throws DataAccessLayerException {
         return (Articulo) super.find(Articulo.class, id);
     }
 

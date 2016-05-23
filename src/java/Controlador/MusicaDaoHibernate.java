@@ -54,7 +54,7 @@ public class MusicaDaoHibernate  extends AbstractDao {
      * @param id
      * @return
      */
-    public Musica find(Long id) throws DataAccessLayerException {
+    public Musica find(Integer id) throws DataAccessLayerException {
         return (Musica) super.find(Musica.class, id);
     }
 

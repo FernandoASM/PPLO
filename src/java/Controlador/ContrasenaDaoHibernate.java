@@ -46,7 +46,7 @@ public class ContrasenaDaoHibernate extends AbstractDao {
      * @param id
      * @return
      */
-    public Contrasena find(Long id) throws DataAccessLayerException {
+    public Contrasena find(Integer id) throws DataAccessLayerException {
         return (Contrasena) super.find(Contrasena.class, id);
     }
 

@@ -55,7 +55,7 @@ public class AccesorioDaoHibernate  extends AbstractDao {
      * @param id
      * @return
      */
-    public Accesorio find(Long id) throws DataAccessLayerException {
+    public Accesorio find(Integer id) throws DataAccessLayerException {
         return (Accesorio) super.find(Accesorio.class, id);
     }
 

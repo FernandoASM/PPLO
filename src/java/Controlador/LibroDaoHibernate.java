@@ -49,7 +49,7 @@ public class LibroDaoHibernate  extends AbstractDao {
      * @param id
      * @return
      */
-    public Libro find(Long id) throws DataAccessLayerException {
+    public Libro find(Integer id) throws DataAccessLayerException {
         return (Libro) super.find(Libro.class, id);
     }
 

@@ -46,7 +46,7 @@ public class TelefonoDaoHibernate extends AbstractDao {
      * @param id
      * @return
      */
-    public Telefono find(Long id) throws DataAccessLayerException {
+    public Telefono find(Integer id) throws DataAccessLayerException {
         return (Telefono) super.find(Telefono.class, id);
     }
 

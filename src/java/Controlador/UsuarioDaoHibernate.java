@@ -46,7 +46,7 @@ public class UsuarioDaoHibernate extends AbstractDao {
      * @param id
      * @return
      */
-    public Usuario find(Long id) throws DataAccessLayerException {
+    public Usuario find(Integer id) throws DataAccessLayerException {
         return (Usuario) super.find(Usuario.class, id);
     }
 

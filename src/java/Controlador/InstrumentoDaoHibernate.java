@@ -54,7 +54,7 @@ public class InstrumentoDaoHibernate  extends AbstractDao {
      * @param id
      * @return
      */
-    public Instrumento find(Long id) throws DataAccessLayerException {
+    public Instrumento find(Integer id) throws DataAccessLayerException {
         return (Instrumento) super.find(Instrumento.class, id);
     }
 

@@ -49,7 +49,7 @@ public class SonidoDaoHibernate  extends AbstractDao {
      * @param id
      * @return
      */
-    public Sonido find(Long id) throws DataAccessLayerException {
+    public Sonido find(Integer id) throws DataAccessLayerException {
         return (Sonido) super.find(Sonido.class, id);
     }
 
