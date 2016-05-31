@@ -5,6 +5,7 @@
  */
 package MB;
 
+
 import Controlador.ArticuloDaoHibernate;
 import Controlador.InstrumentoDaoHibernate;
 import Controlador.LibroDaoHibernate;
@@ -22,6 +23,7 @@ import org.hibernate.Transaction;
 
 
 
+
 import DAO.Articulo;
 import DAO.Instrumento;
 import DAO.Libro;
@@ -33,9 +35,12 @@ import DAO.Accesorio;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -48,10 +53,16 @@ import org.hibernate.cfg.Configuration;
  * @author Rodrigo
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped 
 public class MBSolicitarArticulo implements Serializable {
     
+    
+//@ManagedProperty("#{mBEnviarSolicitud}")
+//    private MBEnviarSolicitud enviarsolicitud;
+ 
+    
 
+    
 //Usuario
     private String correo;
     private String nombre;
@@ -116,10 +127,15 @@ public class MBSolicitarArticulo implements Serializable {
     private Sonido sonido;
     private Accesorio accesorio;
     
-    private Usuario usuario;
+    private Usuario usuario1;
     
+    private Usuario usuariolista;
     
     private List<Articulo> listaTodo;
+    private List<Usuario> listaUsuario;
+    
+    
+    
      
     /**
      * Creates a new instance of MBSolicitarArticulo
@@ -129,14 +145,61 @@ public class MBSolicitarArticulo implements Serializable {
     
         
     
-    public String solicitarPrestamo(Articulo articuloprestamo){
+    public String verInformacionArticulo(Articulo articuloprestamo){
         Articulo tmp = new Articulo();
         System.out.println("antes del set articulo correcto");
         articulo = articuloprestamo;
         System.out.println("set articulo correcto");
-        usuario = articulo.getUsuario();
+        //usuario1 = articulo.getUsuario();
+        usuario1 = articulo.getUsuario();
+        
+        //Usuario
+        //Solo tenia el correo del usuario en la lista de articulos
+        //guardo el correo que esta guardado en la lista
+        correo = usuario1.getCorreo();
+        System.out.println(usuario1.getCorreo());
         System.out.println("set usuario correcto");
-        System.out.println(usuario.getNombre());
+        
+        //con este query obtengo la lista de un solo usuario que tiene ese correo
+        SessionFactory factory;
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            String sql = "Select * from Usuario where correo = '"+correo+"'";//Aqui esta el correo
+            SQLQuery query = session.createSQLQuery(sql);            
+            //query.setParameter("correo",correo);
+            query.addEntity(Usuario.class);
+            listaUsuario = query.list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+       
+        //despues creo otro Usuario usuariolista y obtengo el elemento 0 que es el unico que la lista de ussuairo y lo guardo
+        setUsuariolista(listaUsuario.get(0));
+        
+        System.out.println(usuariolista.getNombre());
+        System.out.println(listaUsuario.isEmpty());
+        System.out.println(usuario1.getCorreo());
+        System.out.println("set usuario correcto");
+        
+        
+        
+        //System.out.println(usuario.getNombre());
                 
         //tmp = listaTodo.get(articulo.getIdarticulo());
         //correo = tmp.getUsuario().getCorreo();
@@ -151,8 +214,70 @@ public class MBSolicitarArticulo implements Serializable {
         //usuario = tmp.getUsuario();
 //        this.nombre = articuloprestamo.getUsuario().getNombre();
         
+        
+        
+        
+        
+        
+        return "VerInformacionArticuloIH";
+    }
+    
+    //los mismo que arriba pero solo para solicitarlo
+    public String solicitarPrestamo(Articulo articuloprestamo){
+        Articulo tmp = new Articulo();
+        System.out.println("antes del set articulo correcto");
+        articulo = articuloprestamo;
+        System.out.println("set articulo correcto");
+        usuario1 = articulo.getUsuario();
+        //Usuario
+        
+        correo = usuario1.getCorreo();
+        System.out.println(usuario1.getCorreo());
+        System.out.println("set usuario correcto");
+        
+        
+        SessionFactory factory;
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            String sql = "Select * from Usuario where correo = '"+correo+"'";
+            SQLQuery query = session.createSQLQuery(sql);            
+            //query.setParameter("correo",correo);
+            query.addEntity(Usuario.class);
+            listaUsuario = query.list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+       
+        
+        setUsuariolista(listaUsuario.get(0));
+        
+        System.out.println(usuariolista.getNombre());
+        System.out.println(listaUsuario.isEmpty());
+        System.out.println(usuario1.getCorreo());
+        System.out.println("set usuario correcto");
+        
+        
+        
         return "solicitarPrestamoIH";
     }
+    
+    
     
     
     
@@ -161,6 +286,10 @@ public class MBSolicitarArticulo implements Serializable {
         listaTodo = articulosDisponible();
         
     }
+    
+    
+    
+    	
     
     
      public List<Articulo> articulosDisponible(){
@@ -177,7 +306,7 @@ public class MBSolicitarArticulo implements Serializable {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            String sql = "Select * from Articulo inner join Usuario on Usuario.correo = Articulo.correo where disponible ='true'";
+            String sql = "Select * from Articulo where disponible ='true'";
             SQLQuery query = session.createSQLQuery(sql);            
             query.addEntity(Articulo.class);
             listaTodo = query.list();
@@ -193,6 +322,17 @@ public class MBSolicitarArticulo implements Serializable {
 return listaTodo;
      }
     
+     
+  
+     
+     
+     
+     
+     
+     
+     
+     
+     
      
      
     /**
@@ -716,15 +856,15 @@ return listaTodo;
     /**
      * @return the usuario
      */
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getUsuario1() {
+        return usuario1;
     }
 
     /**
      * @param usuario the usuario to set
      */
     public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        this.setUsuario1(usuario);
     }
 
     /**
@@ -866,6 +1006,41 @@ return listaTodo;
     public void setTelefono(Integer telefono) {
         this.telefono = telefono;
     }
+
+    /**
+     * @param usuario1 the usuario1 to set
+     */
+    public void setUsuario1(Usuario usuario1) {
+        this.usuario1 = usuario1;
+    }
+
+    /**
+     * @return the usuariolista
+     */
+    public Usuario getUsuariolista() {
+        return usuariolista;
+    }
+
+    /**
+     * @param usuariolista the usuariolista to set
+     */
+    public void setUsuariolista(Usuario usuariolista) {
+        this.usuariolista = usuariolista;
+    }
+
+//    /**
+//     * @return the enviarsolicitud
+//     */
+//    public MBEnviarSolicitud getEnviarsolicitud() {
+//        return enviarsolicitud;
+//    }
+//
+//    /**
+//     * @param enviarsolicitud the enviarsolicitud to set
+//     */
+//    public void setEnviarsolicitud(MBEnviarSolicitud enviarsolicitud) {
+//        this.enviarsolicitud = enviarsolicitud;
+//    }
 
      
      

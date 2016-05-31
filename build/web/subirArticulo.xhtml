@@ -30,6 +30,7 @@
                     <p:menu>
                         <p:submenu label="Menú">  
                             <p:menuitem value="Inicio" action ="inicioHomeIH" />
+                            <p:menuitem value="Mi cuenta" action ="administrarCuentaIH" />
                             <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
                             <p:menuitem value="Música" action ="mostrarMusicaIH" />
                             <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
@@ -63,6 +64,10 @@
                         <br/>
                         <h:outputText value="Descripción : " />
                         <p:inputText id="descripcion" value="#{mBArticulo.descripcion}" >
+                        </p:inputText>
+                        <br/>
+                        <h:outputText value="Estado del Artículo : " />
+                        <p:inputText id="estado" value="#{mBArticulo.estado}" >
                         </p:inputText>
                         <br/>
                         

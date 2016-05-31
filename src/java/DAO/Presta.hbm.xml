@@ -1,27 +1,21 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 26/04/2016 03:15:58 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated 30/05/2016 04:29:34 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="DAO.Presta" table="presta" schema="public" optimistic-lock="version">
         <id name="correo" type="string">
             <column name="correo" length="50" />
             <generator class="foreign">
-                <param name="property">usuario</param>
+                <param name="property">usuarioByCorreo</param>
             </generator>
         </id>
         <many-to-one name="articulo" class="DAO.Articulo" fetch="select">
             <column name="idarticulo" precision="131089" scale="0" not-null="true" />
         </many-to-one>
-        <one-to-one name="usuario" class="DAO.Usuario" constrained="true"></one-to-one>
-        <property name="fechainicio" type="date">
-            <column name="fechainicio" length="13" not-null="true" />
-        </property>
-        <property name="fechafinal" type="date">
-            <column name="fechafinal" length="13" not-null="true" />
-        </property>
-        <property name="calificacion" type="big_decimal">
-            <column name="calificacion" precision="131089" scale="0" not-null="true" />
-        </property>
+        <one-to-one name="usuarioByCorreo" class="DAO.Usuario" constrained="true"></one-to-one>
+        <many-to-one name="usuarioByCorreoconsumidor" class="DAO.Usuario" fetch="select">
+            <column name="correoconsumidor" length="50" />
+        </many-to-one>
     </class>
 </hibernate-mapping>

@@ -5,9 +5,11 @@
  */
 package MB;
 import Controlador.ContrasenaDaoHibernate;
+import Controlador.PrestigioDaoHibernate;
 import Controlador.TelefonoDaoHibernate;
 import Controlador.UsuarioDaoHibernate;
 import DAO.Contrasena;
+import DAO.Prestigioprestador;
 import DAO.Telefono;
 import DAO.Usuario;
 
@@ -246,6 +248,8 @@ public class MBUsuario implements Serializable{
         Usuario tmp = new Usuario();
         Telefono tmp1 = new Telefono();
         Contrasena tmp2 = new Contrasena();
+        Prestigioprestador tmp3 = new Prestigioprestador();
+        
         String redirecciona = "";
         try {
             tmp.setCorreo(getCorreo());
@@ -271,6 +275,11 @@ public class MBUsuario implements Serializable{
             tmp2.setContrasena(contrasena);
             contrasenaDao.save(tmp2);
             
+             PrestigioDaoHibernate prestigioDao = new PrestigioDaoHibernate();
+             tmp3.setUsuario(tmp);
+             tmp3.setPrestigio(0);
+             prestigioDao.save(tmp3);
+             
             
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La cuenta se ha creado satisfactoriamente"));
             redirecciona = "inicioSesionIH";

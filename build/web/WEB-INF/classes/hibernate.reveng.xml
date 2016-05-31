@@ -2,18 +2,18 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="prestapalaorquesta"/>
-  <table-filter match-name="estado"/>
-  <table-filter match-name="musica"/>
-  <table-filter match-name="usuario"/>
+  <table-filter match-name="instrumento"/>
   <table-filter match-name="libro"/>
-  <table-filter match-name="telefono"/>
   <table-filter match-name="contrasena"/>
-  <table-filter match-name="presta"/>
   <table-filter match-name="sonido"/>
+  <table-filter match-name="musica"/>
+  <table-filter match-name="telefono"/>
+  <table-filter match-name="presta"/>
   <table-filter match-name="prestigioconsumidor"/>
+  <table-filter match-name="estado"/>
+  <table-filter match-name="usuario"/>
+  <table-filter match-name="accesorio"/>
   <table-filter match-name="solicita"/>
   <table-filter match-name="prestigioprestador"/>
-  <table-filter match-name="instrumento"/>
   <table-filter match-name="articulo"/>
-  <table-filter match-name="accesorio"/>
 </hibernate-reverse-engineering>

@@ -12,12 +12,12 @@ public class Prestigioprestador  implements java.io.Serializable {
 
      private String correo;
      private Usuario usuario;
-     private BigDecimal prestigio;
+     private int prestigio;
 
     public Prestigioprestador() {
     }
 
-    public Prestigioprestador(Usuario usuario, BigDecimal prestigio) {
+    public Prestigioprestador(Usuario usuario, int prestigio) {
        this.usuario = usuario;
        this.prestigio = prestigio;
     }
@@ -36,11 +36,11 @@ public class Prestigioprestador  implements java.io.Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    public BigDecimal getPrestigio() {
+    public Integer getPrestigio() {
         return this.prestigio;
     }
     
-    public void setPrestigio(BigDecimal prestigio) {
+    public void setPrestigio(Integer prestigio) {
         this.prestigio = prestigio;
     }
 

@@ -11,6 +11,7 @@ import Controlador.LibroDaoHibernate;
 import Controlador.MusicaDaoHibernate;
 import Controlador.SonidoDaoHibernate;
 import Controlador.AccesorioDaoHibernate;
+import Controlador.EstadoDaoHibernate;
 
 
 
@@ -22,6 +23,7 @@ import DAO.Usuario;
 import DAO.Musica;
 import DAO.Sonido;
 import DAO.Accesorio;
+import DAO.Estado;
 import static com.sun.xml.internal.ws.api.pipe.Fiber.current;
 import static com.sun.xml.ws.api.pipe.Fiber.current;
 import java.io.ByteArrayInputStream;
@@ -87,6 +89,10 @@ public class MBArticulo implements Serializable{
     
     private String rutaimagen;
     
+    //Estado
+    private String estado;
+    
+    
     //Istrumento
     private Integer idinstrumento;
     private Integer anoinstrumento;
@@ -126,6 +132,8 @@ public class MBArticulo implements Serializable{
     
     private List<Articulo> listaTodo;
     
+    private List<Estado> listaEstados;
+    
     
     private final String destination="C:\\Users\\Rodrigo\\Desktop\\";
     
@@ -141,7 +149,8 @@ public class MBArticulo implements Serializable{
     @ManagedProperty("#{mBImagen}")
     private MBImagen miImagen;
     
-        
+
+    
     /**
      * Creates a new instance of MBArticulo
      */
@@ -313,6 +322,14 @@ public class MBArticulo implements Serializable{
         }
     }
     
+      public void imprimeestado(List<Estado> art){
+        for (Estado temp : art) {
+            
+                System.out.println(temp.toString());
+            
+        }
+    }
+     
      /*
      public String guardaImagen(String fileName, byte[] bytes){
          File f = null;
@@ -425,6 +442,7 @@ return listaTodo;
        @PostConstruct
     public void init() {
         lista = listaArticulos();
+        listaEstados = estadoArticulos();
         
     }
       
@@ -433,7 +451,9 @@ return listaTodo;
       public String mostrarArticulos(){
             String redirecciona = "";
             lista= listaArticulos();
+            listaEstados = estadoArticulos();
             redirecciona = "administrarArticuloIH";
+            
       return redirecciona;
       }
       
@@ -462,6 +482,7 @@ return listaTodo;
             
             
          }System.out.println("fuera del for");
+         
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se guardo correctamente"));
             redirecciona = "administrarCuentaIH";
         } catch (Exception e) {            
@@ -471,18 +492,88 @@ return listaTodo;
               return redirecciona;
     }
       
+      
+      public List<Estado> estadoArticulos(){
+                    SessionFactory factory;
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            String sql = "Select * from Estado";
+            SQLQuery query = session.createSQLQuery(sql);            
+            query.addEntity(Estado.class);
+            listaEstados = query.list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        imprimeestado(listaEstados);
+return listaEstados;
+     }
+      
+      
+      public void actualizarestado(){
+      try {
+              EstadoDaoHibernate estadoDAO = new EstadoDaoHibernate();
+         for (Estado estados : listaEstados) {     
+             System.out.println("dentro del for");
+            //Articul             
+            //articulos.setIdarticulo(articulos.getIdarticulo());
+            //articulos.setDisponible(articulos.isDisponible());
+            //articulos.setDescripcion(articulos.getDescripcion());
+            //articulos.setUsuario(articulos.getUsuario());
+            //tmp.setImagen(getMiImagen().getImagen());
+            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
+            //rutaimagen = getMiImagen().getRutaimagen();
+            //articulos.setRutaimagen(articulos.getRutaimagen());
+            //guardar string
+
+            
+          estadoDAO.update(estados);
+            
+            
+         }System.out.println("fuera del for");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se guardo correctamente"));
+        } catch (Exception e) {            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Hubo un error al intentar guardar el articulo"));
+            }
+      }
+      
+      
       public void onCellEdit(CellEditEvent event) {
         Articulo tmp = new Articulo();
+        Estado tmp2 = new Estado();
      
             //tmp.setIdarticulo(idarticulo);
             tmp.setDisponible(disponible);
             tmp.setDescripcion(descripcion);
-            //tmp.setUsuario(usuario.getUsuario());
-            //tmp.setImagen(getMiImagen().getImagen());
-            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
-            //tmp.setRutaimagen(rutaimagen);
-            //guardar string,
+            
+            
+            tmp2.setEstado(estado);
+            
+            
             actualizar();
+            actualizarestado();
+          
+    
+            
+
+            
+            
+            System.out.println("actualizo estados");
             //ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
             //articuloDAO.update(tmp);
               System.out.println("El articulo se guardo correctamente");            
@@ -525,6 +616,7 @@ return listaTodo;
         Musica tmp3 = new Musica();
         Sonido tmp4 = new Sonido();
         Accesorio tmp5  = new Accesorio();
+        Estado tmp6 = new Estado();
         
         try {
             //Articulo
@@ -540,6 +632,12 @@ return listaTodo;
 
             ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
             articuloDAO.save(tmp);
+            
+            //Estado
+            tmp6.setArticulo(tmp);
+            tmp6.setEstado(estado);
+            EstadoDaoHibernate estadoDao = new EstadoDaoHibernate();
+            estadoDao.save(tmp6);
             
            //Instrumento
 
@@ -1137,6 +1235,34 @@ return listaTodo;
      */
     public void setListaTodo(List<Articulo> listaTodo) {
         this.listaTodo = listaTodo;
+    }
+
+    /**
+     * @return the estado
+     */
+    public String getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    /**
+     * @return the listaEstados
+     */
+    public List<Estado> getListaEstados() {
+        return listaEstados;
+    }
+
+    /**
+     * @param listaEstados the listaEstados to set
+     */
+    public void setListaEstados(List<Estado> listaEstados) {
+        this.listaEstados = listaEstados;
     }
 
 

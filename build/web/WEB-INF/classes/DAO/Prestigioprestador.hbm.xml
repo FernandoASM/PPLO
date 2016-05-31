@@ -11,8 +11,8 @@
             </generator>
         </id>
         <one-to-one name="usuario" class="DAO.Usuario" constrained="true"></one-to-one>
-        <property name="prestigio" type="big_decimal">
-            <column name="prestigio" precision="131089" scale="0" not-null="true" />
+        <property name="prestigio" type="integer">
+            <column name="prestigio" not-null="true" />
         </property>
     </class>
 </hibernate-mapping>

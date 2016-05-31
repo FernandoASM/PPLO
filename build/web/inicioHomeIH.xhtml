@@ -16,18 +16,19 @@
                 <p:graphicImage value="resources/prestapalaorquesta.png" />    
                 
             </p:layoutUnit>
-            
 
             <p:layoutUnit position="west" size="175" collapsible="true">
                 <h:form>
                     
                     <p:menu>
                         <p:submenu label="Menú">
-                            <p:menuitem value="Inicio"  action = "inicioHomeIH" />
+                            <p:menuitem value="Inicio" action ="inicioHomeIH" />
+                            <p:menuitem value="Mi cuenta" action ="administrarCuentaIH" />
                             <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
                             <p:menuitem value="Música" action ="mostrarMusicaIH" />
                             <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
                             <p:menuitem value="Accesorios" action ="mostrarAccesoriosIH" />
+                            
                           
 
                         </p:submenu>
@@ -36,23 +37,40 @@
                     </h:form>
                 </p:layoutUnit>
             
+            
 
                 
             <p:layoutUnit position = "center"   >
-                ¿Te interesa pedir prestado algún instrumento?
                 <p:messages id="messages" showDetail="true" autoUpdate="true"  closable="true" />
-                <br/>
-                <br/>
+                ¿Te interesa pedir prestado un instrumento?
                 <h:form>
-                    
-              <h:dataTable  value="#{mBArticulo.listaTodo}"  var="car" >  
+<!--                    <p:carousel value="{mBSolicitarArticulo.listaTodo}" headerText="¿Te interesa pedir prestado un instrumento?" var="car" itemStyle="text-align:center" >
+        <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" styleClass="ui-panelgrid-blank">
+            <f:facet name="header">
+                <p:graphicImage value="resources/{car.rutaimagen}"  style="width:75%" />  
+            </f:facet>
+ 
+            <h:outputText value="{car.descripcion}" ></h:outputText>
+           <p:commandButton  value="Solicitar Artículo"/>
+        </p:panelGrid>
+ 
+    </p:carousel>
+-->                     <br/>
+                    <h:dataTable  value="#{mBSolicitarArticulo.listaTodo}"  var="car" >  
          
          <h:column>
-            <p:graphicImage value="resources/#{car.rutaimagen}"  style="width:100%" />   
-         </h:column>
-                  <h:column>
-           <p:commandButton action="#{mBArticulo.actualizar()}"  value="Solicitar prestamo"/>
-            </h:column>
+            <p:graphicImage value="resources/#{car.rutaimagen}"  style="width:75%" />   
+         </h:column>    
+                        <h:column>
+                            <h:outputText value="#{car.descripcion}"  style="width:75%" />   
+         </h:column> 
+                        
+<!--                        <h:column>
+                            <h:outputText value="{car.usuarioe}"  style="width:75%" />   
+         </h:column> -->
+                        <h:column>
+                            <p:commandButton  action = "#{mBSolicitarArticulo.solicitarPrestamo(car)}" value="Solicitar Prestamo"/>
+                   </h:column>
      </h:dataTable>
 
                 </h:form>

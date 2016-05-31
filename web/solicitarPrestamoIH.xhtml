@@ -27,6 +27,8 @@
                 <h:form>
                     <p:menu>
                         <p:submenu label="Menú">
+                            <p:menuitem value="Inicio" action ="inicioHomeIH" />
+                            <p:menuitem value="Mi cuenta" action ="administrarCuentaIH" />
                             <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
                             <p:menuitem value="Música" action ="mostrarMusicaIH" />
                             <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
@@ -39,44 +41,55 @@
                     </h:form>
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
+                    Solicitud de Prestamo
                     <h:form>
-                        Solicitud de Prestamo
+                        <br/>
+                        <br/>
                         <h:panelGrid columns="1">
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        
-                        Datos del Artículo
-                        <br/>
-                        <br/>
-                        <br/>
+                            <h:outputText value ="#{mBSolicitarArticulo.articulo.descripcion}" ></h:outputText>
                         <p:graphicImage value="resources/#{mBSolicitarArticulo.articulo.rutaimagen}"  style="width:75%" />   
-                        <h:outputText value ="#{mBSolicitarArticulo.articulo.descripcion}" ></h:outputText>
-                        <br/>
-                        <br/>
-                        Datos del Prestador
-                        <br/>
-                        <h:outputText value="Nombre : " />
-                        <h:outputText value ="#{mBSolicitarArticulo.usuario.nombre}" ></h:outputText>
-<!--                        <h:outputText value="Apellido Paterno : " />
-                        <h:outputText value ="{mBSolicitarArticulo.usuario.apepaterno}" ></h:outputText>
-                        <h:outputText value="Apellido Materno : " />
-                        <h:outputText value ="{mBSolicitarArticulo.usuario.apematerno}" ></h:outputText>
-                        <h:outputText value="Calle : " />
-                        <h:outputText value ="{mBSolicitarArticulo.usuario.calle}" ></h:outputText>
-                        <h:outputText value="Número : " />
-                        <h:outputText value ="{mBSolicitarArticulo.usuario.numero}" ></h:outputText>
-                        <h:outputText value="Colonia : " />
-                        <h:outputText value ="{mBSolicitarArticulo.usuario.colonia}" ></h:outputText>
-                        <h:outputText value="Delegación : " />
-                        <h:outputText value ="{mBSolicitarArticulo.usuario.delegacion}" ></h:outputText>
-                        <h:outputText value="Código Postal : " />
-                        <h:outputText value ="{mBSolicitarArticulo.usuario.codigopostal}" ></h:outputText>-->
-                        
-                        <br/>
-                        
                         </h:panelGrid>
+                        <br/>
+                             Datos del Prestador                             
+                             <br/>
+                             <br/>
+                             <h:panelGrid columns="2">
+                        <h:outputText value="Nombre : " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.nombre}" ></h:outputText>
+                         <h:outputText value="Apellido Paterno : " />
+                         <h:outputText value ="#{mBSolicitarArticulo.usuariolista.apepaterno}" ></h:outputText>
+                        <h:outputText value="Apellido Materno : " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.apematerno}" ></h:outputText>
+                        <h:outputText value="Correo: " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.correo}" ></h:outputText>
+                        </h:panelGrid>
+                             <br/>
+                              Dirección
+                              <br/>
+                              <br/>
+                             <h:panelGrid columns="2">
+                        <h:outputText value="Calle : " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.calle}" ></h:outputText>
+                        <h:outputText value="Número : " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.numero}" ></h:outputText>
+                        <h:outputText value="Colonia : " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.colonia}" ></h:outputText>
+                        <h:outputText value="Delegación : " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.delegacion}" ></h:outputText>
+                        <h:outputText value="Código Postal : " />
+                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.codigopostal}" ></h:outputText>
+                        <br/>
+                        <br/>
+                        </h:panelGrid>
+                              <p:commandButton  action = "#{mBEnviarSolicitud.sendEmail(mBSolicitarArticulo.usuariolista.correo,mBSolicitarArticulo.usuariolista.nombre,mBSolicitarArticulo.usuariolista.apepaterno,mBSolicitarArticulo.usuariolista.apematerno,mBSolicitarArticulo.articulo.descripcion,mBSolicitarArticulo.articulo.rutaimagen, mBSolicitarArticulo.articulo.idarticulo,mBSolicitarArticulo.usuariolista,mBSolicitarArticulo.articulo)}" value="Enviar solicitud de prestamo">
+                        <p:confirm header="Solicitar Prestamo" message="¿Estas seguro que quieres enviar solicitud de prestamo?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:commandButton  action = "inicioHomeIH" value="Regresar"/>
+                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"  />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
+                            </p:confirmDialog>
+                        
                         
                     
                     
@@ -91,4 +104,5 @@
 
     </f:view>
 </html>
+
 
