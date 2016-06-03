@@ -41,20 +41,19 @@
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
                     <h:form>
-                        Datos del Artículo
+                        Información del Artículo
                         <h:panelGrid columns="1">
                         <p:graphicImage value="resources/#{mBSolicitarArticulo.articulo.rutaimagen}"  style="width:75%" />   
                         <h:outputText value ="#{mBSolicitarArticulo.articulo.descripcion}" ></h:outputText>
                         </h:panelGrid>
                         <br/>
-                        Datos del Prestador
-                        <h:panelGrid columns="2">
-                        <h:outputText value="Nombre : " />
-                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.nombre}" ></h:outputText>
-                         <h:outputText value="Apellido Paterno : " />
-                         <h:outputText value ="#{mBSolicitarArticulo.usuariolista.apepaterno}" ></h:outputText>
-                        <h:outputText value="Apellido Materno : " />
-                        <h:outputText value ="#{mBSolicitarArticulo.usuariolista.apematerno}" ></h:outputText>
+                        Información del Prestador
+                        <br/>
+                        <br/>
+                        <h:panelGrid columns="1">
+                        <h:outputText value="Nombre : #{mBSolicitarArticulo.usuariolista.nombre}" />
+                         <h:outputText value="Apellido Paterno : #{mBSolicitarArticulo.usuariolista.apepaterno}" />
+                        <h:outputText value="Apellido Materno : #{mBSolicitarArticulo.usuariolista.apematerno}" />
                         <br/>
                         <br/>
                         </h:panelGrid>

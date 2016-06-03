@@ -26,24 +26,16 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-//import javax.faces.context.FacesContext;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.faces.bean.ViewScoped;
 
+
+@ManagedBean
+@SessionScoped
 
 
 /**
  *
  * @author Rodrigo
  */
-
-@ManagedBean
-//@RequestScoped
-//@ViewScoped
-@SessionScoped
-
-
-
 
 public class MBUsuario implements Serializable{
     private String correo;
@@ -66,7 +58,7 @@ public class MBUsuario implements Serializable{
     private final FacesContext faceContext;
     
    private Usuario usuario;
- 
+ boolean sesion = false; 
 
   public MBUsuario (){
     
@@ -244,6 +236,9 @@ public class MBUsuario implements Serializable{
     }
     
        
+     /**
+     * Método que guarda en la base de datos la informacion del Usuario en la base de datos.
+     */
     public String guarda() {
         Usuario tmp = new Usuario();
         Telefono tmp1 = new Telefono();
@@ -292,6 +287,12 @@ public class MBUsuario implements Serializable{
         return redirecciona;
     }
     
+    
+    /**
+     * Método que actualiza a todos los datos del Usuario y los guarda en la base de datos
+     * y redirecciona a la siguiente página
+     * @return Redirecciona a la siguiente vista mediante una cadena String
+     */
        public String actualizar() {
         Usuario tmp = new Usuario();
         Telefono tmp1 = new Telefono();
@@ -334,13 +335,20 @@ public class MBUsuario implements Serializable{
         return redirecciona;
     }
  
+       
+       /**
+     * Método que inicia sesion de un Usuario, comprueba si esta registrado en la base de datos y inicializa los valores 
+     * de los parametros de un Usuario
+     * @return Redirecciona a la siguiente vista mediante una cadena String
+     */
     
     public String inicioSesion(){
-  List<Usuario> listUsuario;
-  UsuarioDaoHibernate usuarioDao = new UsuarioDaoHibernate();
-  listUsuario= usuarioDao.findAll();
-  String saludo = "";
-  String nada ="";
+            List<Usuario> listUsuario;
+            UsuarioDaoHibernate usuarioDao = new UsuarioDaoHibernate();
+            listUsuario= usuarioDao.findAll();
+            String saludo = "";
+  
+        String nada  ="";
         for (Usuario usuarioD : listUsuario) {
          if(this.correo.equals(usuarioD.getCorreo()) && this.contrasena.equals(usuarioD.getContrasena().getContrasena())){
              System.out.println(usuarioD.toString());
@@ -360,29 +368,38 @@ public class MBUsuario implements Serializable{
             //httpServletRequest.getSession().setAttribute("sessionUsuario", usuario);
             //faceContext.addMessage("sessionUsuario", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Hola "+ usuarioD.getNombre() + " has iniciado Sesión"));
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Hola "+ usuarioD.getNombre() + " has iniciado Sesión"));
-            saludo= "administrarCuentaIH";            
-        
+            saludo= "administrarCuentaIH";   
+            boolean ok = true;
         break;
             }else {
+           //
              
             saludo= "inicioSesionIH";                    
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Correo o Contraseña incorrecta"));
-            
-          }
-         
+
+          } 
         }
+           
         return saludo;                
     }
     
     
     
+        /**
+     * Método que cierra sesion de un Usuario.
+     * @return Redirecciona a la siguiente vista mediante una cadena String
+     */
+    
     public String cerrarSesion(){
-//        httpServletRequest.getSession().removeAttribute("sessionUsuario");
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Sesión Cerrada correctamente"));
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();        
         return "homeIH";
     }
     
+    /**
+     * Método que elimina un Usuario de la base de Datos
+     * @return Redirecciona a la siguiente vista mediante una cadena String
+     */
     
     public String eliminarUsuario(){
         UsuarioDaoHibernate usuarioDAO = new UsuarioDaoHibernate();
@@ -403,7 +420,9 @@ public class MBUsuario implements Serializable{
     }
     
     
-    
+    public String Cancelar(){
+        return "homeIH";
+    }
     
     
 

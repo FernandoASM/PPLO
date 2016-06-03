@@ -9,7 +9,7 @@
         <h:head>
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title> Ver Artículo </title>
+                <title> Solicitudes de Prestamo </title>
             </f:facet>
         </h:head>
 <h:body>
@@ -28,6 +28,7 @@
                     <p:menu>
                         <p:submenu label="Menú">
                             <p:menuitem value="Inicio" action ="homeIH" />
+                            <p:menuitem value="Mi cuenta" action ="administrarCuentaIH" />
                             <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
                             <p:menuitem value="Música" action ="mostrarMusicaIH" />
                             <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
@@ -41,26 +42,13 @@
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
                     <h:form>
-                        Información del Artículo
-                        <h:panelGrid columns="1">
-                        <p:graphicImage value="resources/#{mBSolicitarArticulo.articulo.rutaimagen}"  style="width:75%" />   
-                        <h:outputText value ="#{mBSolicitarArticulo.articulo.descripcion}" ></h:outputText>
-                        </h:panelGrid>
-                        <br/>
-                        Información del Prestador
-                        <br/>
-                        <br/>
-                        <h:panelGrid columns="1">
-                        <h:outputText value="Nombre : #{mBSolicitarArticulo.usuariolista.nombre}" />
-                         <h:outputText value="Apellido Paterno : #{mBSolicitarArticulo.usuariolista.apepaterno}" />
-                        <h:outputText value="Apellido Materno : #{mBSolicitarArticulo.usuariolista.apematerno}" />
-                        <br/>
-                        <br/>
-                        </h:panelGrid>
-                        <br/>
-                        Si quieres contactar al prestador, primero debes registrarte.
-                        <p:commandButton  action = "registroIH" value="Registrarse"/>
-                        <p:commandButton  action = "homeIH" value="Regresar"/>
+                        Solicitudes de Prestamo
+                        <p:messages id="messages" showDetail="true" autoUpdate="true"  closable="true" />   
+                             <br/>
+                             <br/>
+                             <br/>
+                             <br/>
+                        <p:commandButton  action = "administrarCuentaIH" value="Regresar"/>
                         
                         
                     

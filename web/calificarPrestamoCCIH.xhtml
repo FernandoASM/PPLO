@@ -9,7 +9,7 @@
         <h:head>
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title> Ver Artículo </title>
+                <title> Calificar Prestamo </title>
             </f:facet>
         </h:head>
 <h:body>
@@ -27,7 +27,8 @@
                 <h:form>
                     <p:menu>
                         <p:submenu label="Menú">
-                            <p:menuitem value="Inicio" action ="homeIH" />
+                            <p:menuitem value="Inicio" action ="inicioHomeIH" />
+                            <p:menuitem value="Mi cuenta" action ="administrarCuentaIH" />
                             <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
                             <p:menuitem value="Música" action ="mostrarMusicaIH" />
                             <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
@@ -40,27 +41,37 @@
                     </h:form>
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
+                    Calificar Prestamo
+                    <br/>
+                             <br/>
+                    <br/>
                     <h:form>
-                        Información del Artículo
+                    Prestador
+                             <br/>
+                             <br/>
+                             <h:panelGrid columns="1">
+                                 ¿Cómo calificas al prestador?
+                                 <h:outputText value="#{mBCalificar.usuarioprestador2CC.nombre} #{mBCalificar.usuarioprestador2CC.apepaterno} #{mBCalificar.usuarioprestador2CC.apematerno} " />
+                                 <h:outputText value="Prestigio :" />
+                                 <h:inputText value ="#{mBCalificar.prestigioCC}" ></h:inputText>
+                        </h:panelGrid>
+                                  <br/>
+                             <br/>
+                    Artículo
                         <h:panelGrid columns="1">
-                        <p:graphicImage value="resources/#{mBSolicitarArticulo.articulo.rutaimagen}"  style="width:75%" />   
-                        <h:outputText value ="#{mBSolicitarArticulo.articulo.descripcion}" ></h:outputText>
+                            <p:graphicImage value="resources/#{mBCalificar.articulosolicitado2CC.rutaimagen}"  style="width:75%" />   
+                            <h:outputText value ="#{mBCalificar.articulosolicitado2CC.descripcion}" ></h:outputText>
+                            ¿Cómo calificas al estado del articulo?
+                        <h:outputText value ="Estado del Artículo:" ></h:outputText>
+                        <h:inputText value ="#{mBCalificar.estadoArticuloCC}" ></h:inputText>
                         </h:panelGrid>
                         <br/>
-                        Información del Prestador
-                        <br/>
-                        <br/>
-                        <h:panelGrid columns="1">
-                        <h:outputText value="Nombre : #{mBSolicitarArticulo.usuariolista.nombre}" />
-                         <h:outputText value="Apellido Paterno : #{mBSolicitarArticulo.usuariolista.apepaterno}" />
-                        <h:outputText value="Apellido Materno : #{mBSolicitarArticulo.usuariolista.apematerno}" />
-                        <br/>
-                        <br/>
-                        </h:panelGrid>
-                        <br/>
-                        Si quieres contactar al prestador, primero debes registrarte.
-                        <p:commandButton  action = "registroIH" value="Registrarse"/>
-                        <p:commandButton  action = "homeIH" value="Regresar"/>
+                             <br/>
+                             <br/>
+                             <br/>
+                             <p:commandButton  action = "#{mBCalificar.guardaCC(mBCalificar.usuarioprestador2CC,mBCalificar.articulosolicitado2CC)}" value="Calificar"></p:commandButton>
+                        
+                             <p:commandButton  action = "administrarCuentaIH" value="Regresar"></p:commandButton>
                         
                         
                     
@@ -76,4 +87,5 @@
 
     </f:view>
 </html>
+
 

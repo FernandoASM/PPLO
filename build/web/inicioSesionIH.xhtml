@@ -43,7 +43,7 @@
                     
                     <h:panelGrid columns="3">
                        <h:outputText value="Correo : " />
-                        <p:inputText id="correo" value="#{mBUsuario.correo}" validatorMessage="Introduce una dirección de correo electrónico valida"> <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                        <p:inputText id="correo" value="#{mBUsuario.correo}" validatorMessage="Introduce una dirección de correo electrónico valida o registrate"> <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                         </p:inputText>
                         <br/>
                         <h:outputText value="Contraseña : " />
@@ -52,16 +52,25 @@
                         <br/>
                         <p:commandButton value=" Ingresar " 
                                          update ="msn"  action="#{mBUsuario.inicioSesion()}" ajax="false" validateClient="true" styleClass="ui-priority-primary" />
-                        <p:commandButton action="homeIH"  value="Cancelar"/>
-                    </h:panelGrid>
+                        </h:panelGrid>
+                        </h:form>
+                <h:form>
+                    <h:panelGrid columns="2">
+                        <br/>
+                        <br/>
+                        <p:commandButton action="homeIH" value="Cancelar"    async="true"/>
+                        </h:panelGrid>
+                        </h:form>
+                    
                     <br/>
                     <br/>
-                    <p:commandButton action="registroIH"  value="Registrarse"  />
                     <br/>
                     <br/>
                     <br/>
 
 
+                <h:form>
+                <p:commandButton action="registroIH"  value="Registrarse"  />
                 </h:form>
 
             </p:layoutUnit>

@@ -31,6 +31,8 @@ import DAO.Usuario;
 import DAO.Musica;
 import DAO.Sonido;
 import DAO.Accesorio;
+import DAO.Estado;
+import DAO.Prestigioprestador;
 
 import java.io.Serializable;
 import java.util.List;
@@ -55,13 +57,6 @@ import org.hibernate.cfg.Configuration;
 @ManagedBean
 @SessionScoped 
 public class MBSolicitarArticulo implements Serializable {
-    
-    
-//@ManagedProperty("#{mBEnviarSolicitud}")
-//    private MBEnviarSolicitud enviarsolicitud;
- 
-    
-
     
 //Usuario
     private String correo;
@@ -135,7 +130,13 @@ public class MBSolicitarArticulo implements Serializable {
     private List<Usuario> listaUsuario;
     
     
-    
+    private List<Prestigioprestador> listaPrestigios;
+    private Prestigioprestador Usuarioprestigio;
+     private Integer prestigio;
+     
+     private List<Estado> listaEstados;
+     private Estado estado;
+     private String Estado;
      
     /**
      * Creates a new instance of MBSolicitarArticulo
@@ -144,7 +145,13 @@ public class MBSolicitarArticulo implements Serializable {
     }
     
         
-    
+    /**
+     * Método que busca mediante una consulta SQL la lista de Usuarios donde 
+     * el correo del Usuario que inicio sesion corresponde con quien esta prestando el articuloprestamo 
+     * para ver la informacion tanto del Articulo como del prestador
+     * @param articuloprestamo El párametro articuloprestamo 
+     * @return Una lista de elementos del tipo Usuario
+     */
     public String verInformacionArticulo(Articulo articuloprestamo){
         Articulo tmp = new Articulo();
         System.out.println("antes del set articulo correcto");
@@ -189,40 +196,26 @@ public class MBSolicitarArticulo implements Serializable {
             session.close();
         }
        
-        //despues creo otro Usuario usuariolista y obtengo el elemento 0 que es el unico que la lista de ussuairo y lo guardo
+        //despues creo otro Usuario usuariolista y obtengo el elemento 0 que es el unico que la lista de usuairo y lo guardo
         setUsuariolista(listaUsuario.get(0));
         
         System.out.println(usuariolista.getNombre());
         System.out.println(listaUsuario.isEmpty());
         System.out.println(usuario1.getCorreo());
         System.out.println("set usuario correcto");
-        
-        
-        
-        //System.out.println(usuario.getNombre());
-                
-        //tmp = listaTodo.get(articulo.getIdarticulo());
-        //correo = tmp.getUsuario().getCorreo();
-        //nombre = tmp.getUsuario().getNombre();
-        //usuario.setNombre(nombre);
-        //usuario.setCorreo(correo);
-        
-        //usuario = usuarioDao.find(correousurario);
-         //nombre = articulo.getUsuario().getNombre();
-        //tmp = articuloDAO.find(articulo.getIdarticulo());
-        //System.out.println(nombre);
-        //usuario = tmp.getUsuario();
-//        this.nombre = articuloprestamo.getUsuario().getNombre();
-        
-        
-        
-        
-        
-        
+
         return "VerInformacionArticuloIH";
     }
     
-    //los mismo que arriba pero solo para solicitarlo
+    
+
+/**
+     * Método que busca mediante una consulta SQL la lista de Usuarios donde 
+     * el correo del Usuario corresponde con quien esta prestan el Articulo para ver la informacion
+     * y poder prestar el articulo
+     * @param articuloprestamo El párametro articuloprestamo 
+     * @return Redirecciona a la siguiente vista mediante una cadena String
+     */
     public String solicitarPrestamo(Articulo articuloprestamo){
         Articulo tmp = new Articulo();
         System.out.println("antes del set articulo correcto");
@@ -272,25 +265,136 @@ public class MBSolicitarArticulo implements Serializable {
         System.out.println(usuario1.getCorreo());
         System.out.println("set usuario correcto");
         
-        
+        listaPrestigios = PrestigiosUsuario();
+        listaEstados = EstadosArticulo();
         
         return "solicitarPrestamoIH";
     }
     
     
     
+/**
+     * Método que busca mediante una consulta SQL la lista de Prestigioprestadores donde 
+     * el correo del Usuario corresponde con el usuario que presto el articulo 
+     * @return Prestigioprestador Una lista de elementos de tipo Prestigioprestador
+     */
+    
+    public List<Prestigioprestador> PrestigiosUsuario(){
+                    SessionFactory factory;
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+        
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            String sql = "Select * from Prestigioprestador where correo ='"+usuariolista.getCorreo()+"'";
+            SQLQuery query = session.createSQLQuery(sql);            
+            query.addEntity(Prestigioprestador.class);
+            listaPrestigios = query.list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        imprimePrestigios(listaPrestigios);
+        Usuarioprestigio = listaPrestigios.get(0);
+        prestigio = Usuarioprestigio.getPrestigio();
+return listaPrestigios;
+
+     }
+    
+    
+/**
+     * Método que imprime una lista de Prestigioprestador
+     * * @param art El parámetro art define una la lista de Prestigioprestador
+     */        
+    
+        public void imprimePrestigios(List<Prestigioprestador> art){
+        for (Prestigioprestador temp : art) {
+                System.out.println(temp.toString());
+            
+        }
+    }
+    
+        
+            
+/**
+     * Método que busca mediante una consulta SQL la lista de Estados donde 
+     id del articulo corresponde con articulo que se esta prestando
+     * @return Prestigioprestador Una lista de elementos de tipo Prestigioprestador
+     */
+
+     public List<Estado> EstadosArticulo(){
+                    SessionFactory factory;
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+        
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            String sql = "Select * from Estado where idarticulo ='"+articulo.getIdarticulo()+"'";
+            SQLQuery query = session.createSQLQuery(sql);            
+            query.addEntity(Estado.class);
+            listaEstados = query.list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        imprimeEstados(listaEstados);
+        estado = listaEstados.get(0);
+        Estado = estado.getEstado();
+return listaEstados;
+
+     }
+    
+    
+/**
+     * Método que imprime una lista de Estados
+     * * @param art El parámetro art define una lista de Estado
+     */   
+        public void imprimeEstados(List<Estado> art){
+        for (Estado temp : art) {
+                System.out.println(temp.toString());
+            
+        }
+    }
+     
+     
+    
     
     
        @PostConstruct
     public void init() {
         listaTodo = articulosDisponible();
-        
     }
     
     
     
     	
-    
+    /**
+     * Método que busca mediante una consulta SQL la lista de Articulos que estan
+     * disponibles 
+     * @return listaTodo Una lista de elementos de tipo Articulo
+     */
     
      public List<Articulo> articulosDisponible(){
                     SessionFactory factory;
@@ -321,19 +425,7 @@ public class MBSolicitarArticulo implements Serializable {
         }
 return listaTodo;
      }
-    
-     
-  
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
+
      
     /**
      * @return the listaTodo
@@ -1028,6 +1120,49 @@ return listaTodo;
         this.usuariolista = usuariolista;
     }
 
+    /**
+     * @return the listaPrestigios
+     */
+    public List<Prestigioprestador> getListaPrestigios() {
+        return listaPrestigios;
+    }
+
+    /**
+     * @param listaPrestigios the listaPrestigios to set
+     */
+    public void setListaPrestigios(List<Prestigioprestador> listaPrestigios) {
+        this.listaPrestigios = listaPrestigios;
+    }
+
+    /**
+     * @return the Usuarioprestigio
+     */
+    public Prestigioprestador getUsuarioprestigio() {
+        return Usuarioprestigio;
+    }
+
+    /**
+     * @param Usuarioprestigio the Usuarioprestigio to set
+     */
+    public void setUsuarioprestigio(Prestigioprestador Usuarioprestigio) {
+        this.Usuarioprestigio = Usuarioprestigio;
+    }
+
+    
+    /**
+     * @return the prestigio
+     */
+    public Integer getPrestigio() {
+        return prestigio;
+    }
+
+    /**
+     * @param prestigio the prestigio to set
+     */
+    public void setPrestigio(Integer prestigio) {
+        this.prestigio = prestigio;
+    }
+    
 //    /**
 //     * @return the enviarsolicitud
 //     */
@@ -1041,6 +1176,48 @@ return listaTodo;
 //    public void setEnviarsolicitud(MBEnviarSolicitud enviarsolicitud) {
 //        this.enviarsolicitud = enviarsolicitud;
 //    }
+
+    /**
+     * @return the listaEstados
+     */
+    public List<Estado> getListaEstados() {
+        return listaEstados;
+    }
+
+    /**
+     * @param listaEstados the listaEstados to set
+     */
+    public void setListaEstados(List<Estado> listaEstados) {
+        this.listaEstados = listaEstados;
+    }
+
+    /**
+     * @return the estado
+     */
+    public Estado getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    /**
+     * @return the Estado
+     */
+    public String getEstados() {
+        return Estado;
+    }
+
+    /**
+     * @param Estado the Estado to set
+     */
+    public void setEstado(String Estado) {
+        this.Estado = Estado;
+    }
 
      
      

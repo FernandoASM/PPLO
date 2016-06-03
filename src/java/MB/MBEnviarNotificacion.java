@@ -5,28 +5,25 @@
  */
 package MB;
 
+import Controlador.ArticuloDaoHibernate;
+import Controlador.PrestaDaoHibernate;
 import Controlador.SolicitarArticuloDaoHibernate;
 import DAO.Articulo;
+import DAO.Presta;
 import DAO.Solicita;
 import DAO.Usuario;
 import java.io.Serializable;
-import java.util.Properties;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
-
-import javax.mail.MessagingException;
-
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.Message;
-import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -34,15 +31,18 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-
-
 /**
  *
  * @author Rodrigo
  */
+
 @ManagedBean
 @RequestScoped 
-public class MBEnviarSolicitud  implements Serializable {
+/**
+ *
+ * @author Rodrigo
+ */
+public class MBEnviarNotificacion  implements Serializable {
         
     
     	private final Properties properties = new Properties();
@@ -60,23 +60,21 @@ public class MBEnviarSolicitud  implements Serializable {
            @ManagedProperty("#{mBUsuario}")
             private MBUsuario usuario;
 
- /**
-     * Método que envia un correo de solicitud de prestamo al Usuario prestador de que el Consumidor esta solictando el Articulo
-     * @param destinatario El parámetro destinatario define el correo del prestador 
-     * @param nombrePrestador El parámetro nombrePrestador define el nombre del prestador 
-     * @param appPaternoPrestador El parámetro appPaternoPrestador define el apellido paterno del prestador 
-     * @param appMaternoPRestador El parámetro appMaternoPRestador define el apellido materno del prestador 
+           /**
+     * Método que envia un correo de notificacion de prestamo al usuario consumidor de que el prestador esta de acuerdo en prestar el articulo
+     * @param destinatario El parámetro destinatario define el correo del consumidor 
+     * @param nombreConsumidor El parámetro nombreConsumidor define el nombre del consumidor 
+     * @param appPaternoConsumidor El parámetro appPaternoConsumidor define el apellido paterno del consumidor 
+     * @param appMaternoConsumidor El parámetro appMaternoConsumidor define el apellido materno del consumidor 
      * @param articuloDescripcion El parámetro articuloDescripcion define la descripcion del articulo solicitado
      * @param rutaimagen El parámetro rutaimagen define el la rutaimagen de la imagen del articulo solicitado
-     * @param usuariolista El parámetro usuariolista define al usuario consumidor 
-     * @param articulo El parámetro articulo define el articulo solicitado
-     * @param idarticulo El parámetro idarticulo define el id del articulo solicitado
+     * @param usuarioconsumidor El parámetro usuarioconsumidor define al usuario consumidor 
+     * @param articulosolicitado El parámetro articulosolicitado define el articulo solicitado
      * @return Redirecciona mediante una variable String a la siguiente vista
      */
-        
- 
-	public String sendEmail(String destinatario, String nombrePrestador, String appPaternoPrestador, String appMaternoPRestador,
-                String articuloDescripcion, String rutaimagen,Integer idarticulo,Usuario usuariolista,Articulo articulo){
+           
+	public String sendEmail(String destinatario, String nombreConsumidor, String appPaternoConsumidor, String appMaternoConsumidor,
+                String articuloDescripcion, String rutaimagen,Usuario usuarioconsumidor,Articulo articulosolicitado){
             
             destination = "C:/Users/Rodrigo/Desktop/PrestaPalaOrquesta/web/resources/";
             System.out.println(destinatario);
@@ -103,18 +101,29 @@ public class MBEnviarSolicitud  implements Serializable {
                 message.setFrom(new InternetAddress("Prestapa'laorquesta@gmail.com"));
 
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
-                message.setSubject("Presta Pa'la Orquesta  -  Has recibido una nueva solicitud de prestamo.");
-                message.setText("\n"+"Hola "+ nombrePrestador +" "+ appPaternoPrestador+" "+appMaternoPRestador+", has el siguiente articulo: " +"\n"+ "\n" + articuloDescripcion +"\n" +"\n"+ "El usuario "+usuario.getNombre()+" " +usuario.getAppPaterno()+" "+usuario.getAppMaterno()+  " desea pedir prestado el artículo. ¿Se los prestas?" );
+                message.setSubject("Presta Pa'la Orquesta  -  Has recibido una nueva notificación de prestamo.");
+                message.setText("\n"+"Hola "+ nombreConsumidor +" "+ appPaternoConsumidor+" "+appMaternoConsumidor+", has recbido una nueva  el siguiente articulo: " +"\n"+ "\n" + articuloDescripcion +"\n" +"\n"+ "El usuario "+usuario.getNombre()+" " +usuario.getAppPaterno()+" "+usuario.getAppMaterno()+  " desea pedir prestado el artículo. ¿Se los prestas?" );
                 
                 String direccion  = "http://localhost:8080/PrestaPalaOrquesta";
                 
                 
                 // Create your new message part
                 BodyPart messageBodyPart = new MimeBodyPart();      
-                String htmlText = "<p align=left>Hola "+ nombrePrestador +" "+ appPaternoPrestador+" "+appMaternoPRestador+ ", has recibido una nueva solicitud de prestamo del siguiente artículo:<br>";
+                String htmlText = "<p align=left>Hola "+ nombreConsumidor +" "+ appPaternoConsumidor+" "+appMaternoConsumidor+ ", has recibido una notificacion de prestamo del siguiente artículo:<br>";
                 htmlText+="<p align=left><img src=\"cid:image\"><br><B>" + articuloDescripcion +"</B></p><br>";
-                htmlText+="El usuario "+usuario.getNombre()+" "+usuario.getAppPaterno()+" "+usuario.getAppMaterno()+" desea pedir prestado el artículo. ¿Se lo prestas?<br>"
-                        + "Puedes ingresar a tu cuenta para ver los detalles. <br><br><br><br><br><br><br>";
+                htmlText+="El usuario "+usuario.getNombre()+" "+usuario.getAppPaterno()+" "+usuario.getAppMaterno()+" esta deacuerdo de prestarte el artículo<br>"
+                        + "A continuación puedes ver la información del Prestador para que puedas ponerte en contacto con él. <br><br><br>";
+                htmlText+="Datos del Prestador<br><br>";
+                htmlText+="Nombre: "+usuario.getNombre()+" "+usuario.getAppPaterno()+" "+usuario.getAppMaterno()+"<br>";
+                htmlText+="Correo: "+usuario.getCorreo()+"<br>";
+                htmlText+="Teléfono: "+usuario.getTelefono()+"<br><br>";
+                htmlText+="Dirección:<br><br>";
+                htmlText+="Calle: "+usuario.getCalle()+"<br>";
+                htmlText+="Número: "+usuario.getNum()+"<br>";
+                htmlText+="Colonia: "+usuario.getColonia()+"<br>";
+                htmlText+="Delegación: "+usuario.getDelegacion()+"<br>";
+                htmlText+="Código Postal: "+usuario.getCodigopostal()+"<br><br><br>";
+                htmlText+="Después de que se realice el arreglo del prestamo, te invitamos a que califiques como te fue con el Prestador y el Artículo.<br><br>Gracias.<br><br><br><br>";
                 htmlText+="<p align=center> <a href="+direccion+"> <img src=\"cid:presta\"></a>";
                 htmlText+= "<h2><p align=center> <font color=#0033FF> <a href="+direccion+">Presta Pa'la Orquesta</a> </font> </p></h2><br><br><br><br><br>";
                 htmlText+="<p align=center><img src=\"cid:tjones\" height=110 width=170>";
@@ -166,14 +175,17 @@ public class MBEnviarSolicitud  implements Serializable {
                 transport.sendMessage(message, message.getAllRecipients());
                 transport.close();
                 enviado = true;
-                System.out.println(solicitarArticulo.getUsuariolista().getCorreo());
+                //System.out.println(solicitarArticulo.getUsuariolista().getCorreo());
                 System.out.print(enviado);                
-                guarda(articulo,usuariolista);
-                System.out.println("Solicitud Guardada");
-     
+                guarda(articulosolicitado,usuarioconsumidor);
+                System.out.println("Prestamo Guardada");
                 
+                articulosolicitado.setDisponible(false);
+                ArticuloDaoHibernate articuloDao = new ArticuloDaoHibernate();
+                articuloDao.update(articulosolicitado);
+                System.out.println("articulo actualizado");
                 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La solitud de prestamo ha sido enviada"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La notificación de prestamo ha sido enviada"));
                 redirecciona = "inicioHomeIH";
                 
 
@@ -185,26 +197,24 @@ public class MBEnviarSolicitud  implements Serializable {
 
     }
 
-        
-        /**
-     * Método que guarda un objeto del tipo Solicita(Solicitud) en la base de Datos 
+/**
+     * Método que guarda un objeto del tipo Presta(Prestamo) en la base de Datos 
      * @param articulo El parámetro articulo define el Articulo solicitado
-     * @param usuariolista El parámetro usuarioconsumidor define el Usuario prestador
-     */
-        
-        public void guarda(Articulo articulo,Usuario usuariolista) {
-        Solicita tmp = new Solicita();
+     * @param usuarioconsumidor El parámetro usuarioconsumidor define el Usuario consumidor
+     */        
+        public void guarda(Articulo articulo,Usuario usuarioconsumidor) {
+        Presta tmp = new Presta();
         try {
             tmp.setArticulo(articulo);
-            tmp.setUsuarioByCorreo(usuariolista);
-            tmp.setUsuarioByCorreosolicita(usuario.getUsuario());
+            tmp.setUsuarioByCorreo(usuario.getUsuario());
+            tmp.setUsuarioByCorreoconsumidor(usuarioconsumidor);
             
             
-            SolicitarArticuloDaoHibernate solicitaDAO = new SolicitarArticuloDaoHibernate();
-            solicitaDAO.save(tmp); 
+            PrestaDaoHibernate prestaDAO = new PrestaDaoHibernate();
+            prestaDAO.save(tmp); 
             
         } catch (Exception e) {
-            System.out.println("Error al intentar guardar solicitud" + e);
+            System.out.println("Error al intentar guardar presta" + e);
             
         }
     }
@@ -239,26 +249,3 @@ public class MBEnviarSolicitud  implements Serializable {
         this.usuario = usuario;
     }
 }
-//                String redirecciona = "";
-//		init();
-//		try{
-//			MimeMessage message = new MimeMessage(session);
-//			message.setFrom(new InternetAddress((String)properties.get("mail.smtp.mail.sender")));
-//			message.addRecipient(Message.RecipientType.TO, new InternetAddress("saderjack@gmail.com"));
-//			message.setSubject("Prueba");
-//			message.setText("Texto");
-//			Transport t = session.getTransport("smtp");
-//			t.connect((String)properties.get("mail.smtp.user"), "9Jfs+tc7Ggm");
-//			t.sendMessage(message, message.getAllRecipients());
-//			t.close();
-//                        redirecciona = "inicioHomeIH";
-//		}catch (MessagingException me){
-//                        System.out.println("Error al enviar correo "+ me);//Aqui se deberia o mostrar un mensaje de error o en lugar
-//                        //de no hacer nada con la excepcion, lanzarla para que el modulo
-//                        //superior la capture y avise al usuario con un popup, por ejemplo.
-//			
-//		}
-//		return redirecciona;
-//	}
-    
-

@@ -60,7 +60,7 @@ import org.hibernate.cfg.Configuration;
 
 /**
  *
- * @author fernando
+ * @author Rodrigo
  */
 @ManagedBean 
 @SessionScoped
@@ -71,30 +71,32 @@ public class MBImagen implements Serializable{
 
 
     
-    
- public void upload(FileUploadEvent event) {  
-        //FacesMessage msg = new FacesMessage("Success! ", event.getFile().getFileName() + " is uploaded.");  
-                //FacesContext.getCurrentInstance().addMessage(null, msg)
-        // Do what you want with the file      
-        
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext(); 
-		String txtField = ec.getRequestParameterMap().get("myform:txtField");
-                System.out.println(txtField);
-                this.setRutaimagen(getDestination() + event.getFile().getFileName()); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg
-        try {
-            imagen = event.getFile().getContents();
-            copyFile(event.getFile().getFileName(), event.getFile().getInputstream());        
-            rutaimagen = getDestination() + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
-            System.out.println("la ruta es " + getRutaimagen());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
-        } catch (IOException e) {
-          //   FacesMessage message = new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded.");
-           // FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-        this.setRutaimagen(getDestination() + event.getFile().getFileName()); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
-
-    }  
+// public void upload(FileUploadEvent event) {  
+//                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext(); 
+//		String txtField = ec.getRequestParameterMap().get("myform:txtField");
+//                System.out.println(txtField);
+//                this.setRutaimagen(getDestination() + event.getFile().getFileName()); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg
+//        try {
+//            imagen = event.getFile().getContents();
+//            copyFile(event.getFile().getFileName(), event.getFile().getInputstream());        
+//            rutaimagen = getDestination() + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
+//            System.out.println("la ruta es " + getRutaimagen());
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
+//        } catch (IOException e) {
+//          //   FacesMessage message = new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded.");
+//           // FacesContext.getCurrentInstance().addMessage(null, msg);
+//        }
+//        this.setRutaimagen(getDestination() + event.getFile().getFileName()); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
+//
+//    }  
+// 
  
+ 
+ /**
+     * Método que recibe un flujo de informacion del archivo que se quiere guardar en la carpeta del proyecto 
+     * @param fileName El párametro fileName define el nombre del archivo que se va a guardar
+     * @param in El párametro in define el flujo de informacion del archivo que se quiere guardar
+     */
     public void copyFile(String fileName, InputStream in) {
                  //ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
                  destination = "C:\\Users\\Rodrigo\\Desktop\\PrestaPalaOrquesta\\web\\resources\\";//(String) servletContext.getRealPath("/resources"); // Sustituye "/" por el directorio ej: "/upload
@@ -111,45 +113,17 @@ public class MBImagen implements Serializable{
                 out.close();
                 System.out.println("New file created!");
                 
-                /////////////////////////
-                /*
-                SessionFactory factory;
-        try {
-            factory = new Configuration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
-            System.err.println("Failed to create sessionFactory object." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-        Session session = factory.openSession();
-        Transaction tx = null;
-        try {
-            this.rutaimagen = destination + fileName; //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg" 
-            tx = session.beginTransaction();
-            String sql = "UPDATE Articulo set rutaimagen = :rutaimagen where idarticulo = :idarticulo";
-            Query query = session.createQuery(sql);
-            query.setParameter("rutaimagen", rutaimagen);
-            query.setParameter("idarticulo", idarticulo);
-            int result = query.executeUpdate();
-            System.out.println("Rows affected: " + result);            
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-                
-  */              
-                
                 } catch (IOException e) {
                 System.out.println(e.getMessage());
                 }
     }
     
     
-    
+   
+     /**
+     * Método que imprime una lista de Articulos
+     * * @param art El parámetro art define el la lista de Articulos
+     */
      public void imprime(List<Articulo> art){
         for (Articulo temp : art) {
             
@@ -158,38 +132,9 @@ public class MBImagen implements Serializable{
         }
     }
     
-     /*
-     public String guardaImagen(String fileName, byte[] bytes){
-         File f = null;
-         InputStream in = null;
-         try{
-             f= new File(destination + usuario.getCorreo()+ fileName);
-             //in = new ByteArrayInputStream(bytes);
-             ByteArrayInputStream inn = new ByteArrayInputStream(bytes);
-             System.out.println("Hasta aqui vas mejor");
-             FileOutputStream out = new FileOutputStream(f.getAbsolutePath());
-             int c = 0;
-             while ((c = inn.read()) >= 0){
-                 out.write(c);
-             }
-             out.flush();
-             out.close();
-             rutaimagen = destination + usuario.getCorreo()+ fileName;
-             
-                     SessionFactory factory;
-        try {
-            factory = new Configuration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
-            System.err.println("Failed to create sessionFactory object." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }             
-             
-         }catch(Exception e){
-             System.out.println("No se pudo cargar la imagen");
-         }
-             return rutaimagen;
-     }
-     
+      /**
+     * Método que carga la imagen que recibe del Usuario y la guarda en una carpeta del proyecto
+     * @param event El parámetro event define un objeto de tipo FileUploadEvent
      */
      public void subiImagen (FileUploadEvent event){
          try{

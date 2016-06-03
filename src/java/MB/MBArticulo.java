@@ -226,102 +226,23 @@ public class MBArticulo implements Serializable{
     public void setMsn(String msn) {
         this.msn = msn;
     }
+   
     
-    
-    
-    
-    
-  
-    
-    //Subir Imagen
-    
-    
- 
-    public void upload(FileUploadEvent event) {  
-        //FacesMessage msg = new FacesMessage("Success! ", event.getFile().getFileName() + " is uploaded.");  
-                //FacesContext.getCurrentInstance().addMessage(null, msg)
-        // Do what you want with the file      
-        
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext(); 
-		String txtField = ec.getRequestParameterMap().get("myform:txtField");
-                System.out.println(txtField);
-                this.rutaimagen = destination + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg
-        try {
-            copyFile(event.getFile().getFileName(), event.getFile().getInputstream());        
-            this.rutaimagen = destination + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
-            System.out.println("la ruta es " + rutaimagen);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
-            this.rutaimagen = destination + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
-        } catch (IOException e) {
-          //   FacesMessage message = new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded.");
-           // FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-             this.rutaimagen = destination + event.getFile().getFileName(); //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg"
-
-    }  
- 
-    public void copyFile(String fileName, InputStream in) {
-           try {
-               OutputStream out = new FileOutputStream(new File(destination + usuario.getCorreo()+ fileName ));
-              
-               int read = 0;
-                byte[] bytes = new byte[1024];
-              
-                while ((read = in.read(bytes)) != -1) {
-                    out.write(bytes, 0, read);
-                }
-                in.close();
-                out.flush();
-                out.close();
-                System.out.println("New file created!");
-                
-                /////////////////////////
-                
-                SessionFactory factory;
-        try {
-            factory = new Configuration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
-            System.err.println("Failed to create sessionFactory object." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-
-        
-        Session session = factory.openSession();
-        Transaction tx = null;
-        try {
-            this.rutaimagen = destination + fileName; //Iniciar variable global destination + fileName + usuario.getCorreo() + ".jpg" 
-            tx = session.beginTransaction();
-            String sql = "Select * from Articulo where disponible ='false'";
-            Query query = session.createQuery(sql);
-            int result = query.executeUpdate();
-            
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-                
-                
-                
-                } catch (IOException e) {
-                System.out.println(e.getMessage());
-                }
-    }
-    
-    
-    
+     /**
+     * Método que imprime una lista de articulos
+     * @param art El parámetro art define el la lista de articulos
+     */
      public void imprime(List<Articulo> art){
         for (Articulo temp : art) {
-            
                 System.out.println(temp.toString());
             
         }
     }
     
+     /**
+     * Método que imprime una lista de Estados
+     * * @param art El parámetro art define una la lista de Estados
+     */
       public void imprimeestado(List<Estado> art){
         for (Estado temp : art) {
             
@@ -330,43 +251,11 @@ public class MBArticulo implements Serializable{
         }
     }
      
-     /*
-     public String guardaImagen(String fileName, byte[] bytes){
-         File f = null;
-         InputStream in = null;
-         try{
-             f= new File(destination + usuario.getCorreo()+ fileName);
-             //in = new ByteArrayInputStream(bytes);
-             ByteArrayInputStream inn = new ByteArrayInputStream(bytes);
-             System.out.println("Hasta aqui vas mejor");
-             FileOutputStream out = new FileOutputStream(f.getAbsolutePath());
-             int c = 0;
-             while ((c = inn.read()) >= 0){
-                 out.write(c);
-             }
-             out.flush();
-             out.close();
-             rutaimagen = destination + usuario.getCorreo()+ fileName;
-             
-                     SessionFactory factory;
-        try {
-            factory = new Configuration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
-            System.err.println("Failed to create sessionFactory object." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }             
-             
-         }catch(Exception e){
-             System.out.println("No se pudo cargar la imagen");
-         }
-             return rutaimagen;
-     }
-
      
-     
-     
+     /**
+     * Método que busca mediante una consulta SQL la lista de articulos que estan disponibles.
+     * @return Una lista de elementos del tipo Articulo
      */
-     
      public List<Articulo> articulosDisponible(){
                     SessionFactory factory;
         try {
@@ -398,23 +287,11 @@ return listaTodo;
      }
      
      
-     public void subiImagen (FileUploadEvent event){
-         try{
-             
-             System.out.println("Hasta aqui vas bien");
-     //        this.rutaimagen = guardaImagen(event.getFile().getFileName(),imagen);
-             copyFile(event.getFile().getFileName(),event.getFile().getInputstream());
-             this.imagen= event.getFile().getContents();
-
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La imagen " + event.getFile().getFileName() + " se ha guardado satisfactoriamente"));
-         }catch(Exception e){
-             FacesMessage message = new FacesMessage("Is NOT Succesful", event.getFile().getFileName() + " is not uploaded.");
-             FacesContext.getCurrentInstance().addMessage(null, message);
-         }
-         
-         
-     }
-
+/**
+     * Método que devuelve una lista de elementos de tipo Articulo del Usuario que actualmente esta
+     * en sesion haciendo una consulta a la base.
+     * @return Una lista de elementos del tipo Articulo
+     */
       public List<Articulo> listaArticulos() {
         ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
         setLista((List<Articulo>) articuloDAO.findAll());
@@ -430,15 +307,7 @@ return listaTodo;
         return getLista();
     }
       
-      
-//            public List<Articulo> listaTodosArticulos() {
-//        ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-//        setListaTodo((List<Articulo>) articuloDAO.findAll());
-//        imprime(getListaTodo());
-//        return getListaTodo();
-//    }
-//       
-//       
+        
        @PostConstruct
     public void init() {
         lista = listaArticulos();
@@ -447,7 +316,11 @@ return listaTodo;
     }
       
     
-      
+      /**
+     * Método que inicializa las variables lista y listaEstados mediante los métodos listaArticulos y estadoArticulos,
+     * y redirecciona a la siguiente página
+     * @return Una lista de elementos del tipo Articulo
+     */
       public String mostrarArticulos(){
             String redirecciona = "";
             lista= listaArticulos();
@@ -458,7 +331,11 @@ return listaTodo;
       }
       
       
-      
+      /**
+     * Método que actualiza a todos los elementos de la lista Articulos
+     * y redirecciona a la siguiente página
+     * @return Redirecciona a la siguiente vista mediante una cadena String
+     */
       public String actualizar() {
           String redirecciona= "";
          
@@ -466,23 +343,9 @@ return listaTodo;
               ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
          for (Articulo articulos : lista) {     
              System.out.println("dentro del for");
-            //Articulo
-            //articulos.setIdarticulo(articulos.getIdarticulo());
-            //articulos.setDisponible(articulos.isDisponible());
-            //articulos.setDescripcion(articulos.getDescripcion());
-            //articulos.setUsuario(articulos.getUsuario());
-            //tmp.setImagen(getMiImagen().getImagen());
-            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
-            //rutaimagen = getMiImagen().getRutaimagen();
-            //articulos.setRutaimagen(articulos.getRutaimagen());
-            //guardar string
-
-            
-            articuloDAO.update(articulos);
-            
+            articuloDAO.update(articulos);            
             
          }System.out.println("fuera del for");
-         
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se guardo correctamente"));
             redirecciona = "administrarCuentaIH";
         } catch (Exception e) {            
@@ -493,6 +356,10 @@ return listaTodo;
     }
       
       
+      /**
+     * Método que busca mediante una consulta SQL la lista de Estados.
+     * @return Una lista de elementos del tipo Estado
+     */
       public List<Estado> estadoArticulos(){
                     SessionFactory factory;
         try {
@@ -525,26 +392,16 @@ return listaEstados;
      }
       
       
+      
+     /**
+     * Método que actualiza los valores de la lista listaEstados.
+     */
       public void actualizarestado(){
       try {
               EstadoDaoHibernate estadoDAO = new EstadoDaoHibernate();
          for (Estado estados : listaEstados) {     
-             System.out.println("dentro del for");
-            //Articul             
-            //articulos.setIdarticulo(articulos.getIdarticulo());
-            //articulos.setDisponible(articulos.isDisponible());
-            //articulos.setDescripcion(articulos.getDescripcion());
-            //articulos.setUsuario(articulos.getUsuario());
-            //tmp.setImagen(getMiImagen().getImagen());
-            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
-            //rutaimagen = getMiImagen().getRutaimagen();
-            //articulos.setRutaimagen(articulos.getRutaimagen());
-            //guardar string
-
-            
+             System.out.println("dentro del for");            
           estadoDAO.update(estados);
-            
-            
          }System.out.println("fuera del for");
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El articulo se guardo correctamente"));
         } catch (Exception e) {            
@@ -553,29 +410,24 @@ return listaEstados;
       }
       
       
+      
+      
+     /**
+     * Método que recibe una evento de editar celda de una lista y actualiza los datos de esa celda
+     * @param event El parámetro event define un objeto de tipo CellEditEvent
+     */
       public void onCellEdit(CellEditEvent event) {
         Articulo tmp = new Articulo();
         Estado tmp2 = new Estado();
-     
-            //tmp.setIdarticulo(idarticulo);
+
             tmp.setDisponible(disponible);
             tmp.setDescripcion(descripcion);
-            
-            
             tmp2.setEstado(estado);
-            
-            
+
             actualizar();
             actualizarestado();
-          
-    
-            
-
-            
             
             System.out.println("actualizo estados");
-            //ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
-            //articuloDAO.update(tmp);
               System.out.println("El articulo se guardo correctamente");            
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Articulo Actualizado"));
         
@@ -583,7 +435,10 @@ return listaEstados;
     }
           
      
-      
+      /**
+     * Método que recibe una evento de editar celda de una lista y actualiza los datos de esa celda
+     * @param event El parámetro event define un objeto de tipo CellEditEvent
+     */
       
       public void onRowEdit(RowEditEvent event) {
         Articulo tmp = new Articulo();
@@ -592,11 +447,6 @@ return listaEstados;
             tmp.setDisponible(disponible);
             tmp.setDescripcion(descripcion);
             tmp.setUsuario(usuario.getUsuario());
-            //tmp.setImagen(getMiImagen().getImagen());
-            //System.out.println("la ruta es "+ getMiImagen().getRutaimagen());
-            //tmp.setRutaimagen(rutaimagen);
-            //guardar string
-            
             ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
             articuloDAO.update(tmp);
               System.out.println("El articulo se guardo correctamente");            
@@ -604,11 +454,20 @@ return listaEstados;
               
     }
       
+      /**
+     * Método que recibe una evento de editar celda de una lista y cancela la opcion de editar la celda
+     * @param event El parámetro event define un objeto de tipo CellEditEvent
+     */
+      
     public void onRowCancel(RowEditEvent event) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Operacion cancelada"));
     }
-      
-
+     
+    
+    
+     /**
+     * Método que guarda en la base de datos la informacion del Articulo.
+     */
     public void guarda() {
         Articulo tmp = new Articulo();
         Instrumento tmp1 = new Instrumento();
@@ -719,31 +578,11 @@ return listaEstados;
     }
     
     
-  /**  public String inicioSesion(){
-
-  List<Articulo> listUsuario;
-  UsuarioDaoHibernate usuarioDao = new UsuarioDaoHibernate();
-  listUsuario= usuarioDao.findAll();
-  String saludo = "";
-        for (Articulo usuario : listUsuario) {
-            System.out.println("AAA"+usuario.toString());
-         if(this.correo.equals(usuario.getCorreo()) && this.contrasena.equals(usuario.getContrasena().getContrasena())){
-             System.out.println(usuario.toString());
-        setMsn("Hola "+ usuario.getNombre() + " Bienvenido has iniciado Sesión" );
-        saludo= "administrarCuentaIH";            
-        break;
-            }else {
-                setMsn("Correo o contraseña incorrecta");
-                saludo= "index";                    
-          }    
-        }
-        return saludo;                
-    }
-     * @param articulo
-     * @return 
-    */
-    
-    
+  
+    /**
+     * Método que elimina un Articulo de la base de datos, recorre la lista de todos los articulos de la base y eliminar el indicado.
+     * @return Redirecciona a la siguiente vista mediante una cadena String
+     */
     public String deletearticulo(Integer idart) {
 		ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
                 //List<Articulo> lista2 = articuloDAO.findAll();
@@ -759,6 +598,11 @@ return listaEstados;
         return "administrarCuentaIH";
 	}
     
+    
+    /**
+     * Método que elimina un Articulo de la base de datos, recorre la lista de todos los articulos de la base y eliminar el indicado.
+     * @return Redirecciona a la siguiente vista mediante una cadena String
+     */
     public String eliminarArticulo(){
         ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();
         List<Articulo> lista2 = articuloDAO.findAll();
@@ -772,6 +616,9 @@ return listaEstados;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El artículo ha sido eliminado"));    
         return "administrarCuentaIH";
     }
+    
+    
+    
 
     public String eliminarArticuloDos(int idarticulodos){
         ArticuloDaoHibernate articuloDAO = new ArticuloDaoHibernate();

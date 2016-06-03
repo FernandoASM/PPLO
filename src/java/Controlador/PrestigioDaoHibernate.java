@@ -36,7 +36,7 @@ public class PrestigioDaoHibernate extends AbstractDao {
      *
      * @param prestigioprestador
      */
-    public void update(PrestigioDaoHibernate prestigioprestador) throws DataAccessLayerException {
+    public void update(Prestigioprestador prestigioprestador) throws DataAccessLayerException {
         super.update(prestigioprestador);
     }
 
@@ -45,7 +45,7 @@ public class PrestigioDaoHibernate extends AbstractDao {
      *
      * @param prestigioprestador
      */
-    public void delete(PrestigioDaoHibernate prestigioprestador) throws DataAccessLayerException {
+    public void delete(Prestigioprestador prestigioprestador) throws DataAccessLayerException {
         super.delete(prestigioprestador);
     }
 
@@ -55,8 +55,8 @@ public class PrestigioDaoHibernate extends AbstractDao {
      * @param id
      * @return
      */
-    public PrestigioDaoHibernate find(Integer id) throws DataAccessLayerException {
-        return (PrestigioDaoHibernate) super.find(PrestigioDaoHibernate.class, id);
+    public Prestigioprestador find(Integer id) throws DataAccessLayerException {
+        return (Prestigioprestador) super.find(Prestigioprestador.class, id);
     }
 
     /**
@@ -65,6 +65,6 @@ public class PrestigioDaoHibernate extends AbstractDao {
      * @return
      */
     public List findAll() throws DataAccessLayerException {
-        return super.findAll(PrestigioDaoHibernate.class);
+        return super.findAll(Prestigioprestador.class);
     }
 }

@@ -28,6 +28,7 @@
                     <p:menu>
                         <p:submenu label="Menú">
                             <p:menuitem value="Inicio" action ="homeIH" />
+                            <p:menuitem value="Mi cuenta" action ="administrarCuentaIH" />
                             <p:menuitem value="Instrumentos"  action = "mostrarInstrumentosIH" />
                             <p:menuitem value="Música" action ="mostrarMusicaIH" />
                             <p:menuitem value="Sonido" action ="mostrarSonidoIH" />
@@ -41,28 +42,55 @@
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
                     <h:form>
-                        Datos del Artículo
-                        <h:panelGrid columns="1">
-                            <p:graphicImage value="resources/#{mBNotificacionPrestamo.articulosolicitado.rutaimagen}"  style="width:75%" />   
-                            <h:outputText value ="#{mBNotificacionPrestamo.articulosolicitado.idarticulo}" ></h:outputText>
+                        <p:messages id="messages" showDetail="true" autoUpdate="true"  closable="true" />
+                        Notificación de Prestamo
+                             <br/>
+                             <br/>
+                             <h:panelGrid columns="1">
+                                 <h:outputText value="¡Hola!" />
+                        <h:outputText value="El usuario #{mBNotificacionPrestamo.usuarioconsumidor.nombre} #{mBNotificacionPrestamo.usuarioconsumidor.apepaterno} #{mBNotificacionPrestamo.usuarioconsumidor.apematerno} desea pedir prestado tu artículo. ¿Se lo prestas?" />
+                        <h:outputText value="A continuación se muestran los datos de solicitante: " />
+                        <h:outputText value="Correo: " />
+                        <h:outputText value ="#{mBNotificacionPrestamo.usuarioconsumidor.correo}" ></h:outputText>
+                        </h:panelGrid>
+                             <br/>
+                              Dirección
+                              <br/>
+                             <h:panelGrid columns="1">
+                        <h:outputText value="Calle :#{mBNotificacionPrestamo.usuarioconsumidor.calle} " />
+                        <h:outputText value="Número :#{mBNotificacionPrestamo.usuarioconsumidor.numero} " />
+                        <h:outputText value="Colonia : #{mBNotificacionPrestamo.usuarioconsumidor.colonia}" />
+                        <h:outputText value="Delegación : #{mBNotificacionPrestamo.usuarioconsumidor.delegacion}" />
+                        <h:outputText value="Código Postal : #{mBNotificacionPrestamo.usuarioconsumidor.codigopostal}" />
+                        <br/>
+                        <br/>
+                        </h:panelGrid>
+                              Información del Articulo Solicitado
+                              <h:panelGrid columns="1">
+                                  <p:graphicImage value="resources/#{mBNotificacionPrestamo.articulosolicitado.rutaimagen}"  style="width:75%" />   
+                                  <h:outputText value ="#{mBNotificacionPrestamo.articulosolicitado.descripcion}" ></h:outputText>
                         </h:panelGrid>
                         <br/>
-                        Datos del Consumidor
-                        <h:panelGrid columns="2">
-                        <h:outputText value="Nombre : " />
-                        <h:outputText value ="#{mBNotificacionPrestamo.usuarioconsumidor.nombre}" ></h:outputText>
-                         <h:outputText value="Apellido Paterno : " />
-                         <h:outputText value ="#{mBNotificacionPrestamo.usuarioconsumidor.apepaterno}" ></h:outputText>
-                        <h:outputText value="Apellido Materno : " />
-                        <h:outputText value ="#{mBNotificacionPrestamo.usuarioconsumidor.apematerno}" ></h:outputText>
                         <br/>
                         <br/>
-                        </h:panelGrid>
                         <br/>
-                        <p:commandButton  action = "#{mBNotificacionPrestamo.articulosSolicitado()}" value="Enviar notificación de prestamo">
-                        <p:confirm header="Notificación Prestamo" message="¿Estas seguro que quieres enviar solicitud de prestamo?" icon="ui-icon-alert" />
+<!--                        <h:dataTable  value="{mBNotificacionPrestamo.}"  var="car" >  
+                          <h:column>
+                          <p:graphicImage value="resources/{car.articulo.rutaimagen}"  style="width:75%" />   
+                        </h:column>    
+                        <h:column>
+                         <h:outputText value="{car.articulo.descripcion}"  style="width:75%" />   
+                          </h:column> 
+                        <h:column>
+                          <p:commandButton  action = "{mBSolicitarArticulo.verInformacionArticulo(car)}" value="Ver información"/>
+                    </h:column>
+                            </h:dataTable>-->
+                        <br/>
+                        <h:outputText value="¿Estas deacuerdo en prestarle este artículo?" />
+                        <p:commandButton  action = "#{mBEnviarNotificacion.sendEmail(mBNotificacionPrestamo.usuarioconsumidor.correo, mBNotificacionPrestamo.usuarioconsumidor.nombre, mBNotificacionPrestamo.usuarioconsumidor.apepaterno, mBNotificacionPrestamo.usuarioconsumidor.apematerno, mBNotificacionPrestamo.articulosolicitado.descripcion, mBNotificacionPrestamo.articulosolicitado.rutaimagen,mBNotificacionPrestamo.usuarioconsumidor,mBNotificacionPrestamo.articulosolicitado)}" value="Enviar notificación de prestamo">
+                        <p:confirm header="Notificación Prestamo" message="Tus datos se enviarán al solicitante para que se ponga en contacto contigo. ¿Estas deacuerdo?"  icon="ui-icon-alert" />
                         </p:commandButton>
-                        <p:commandButton  action = "inicioHomeIH" value="Regresar"/>
+                        <p:commandButton  action = "administrarCuentaIH" value="Regresar"/>
                          <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                             <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"  />
                             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
